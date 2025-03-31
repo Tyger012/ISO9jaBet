@@ -36,8 +36,8 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
     matchesWithActiveBets
   } = useBetting();
   
-  // Setup countdown
-  const targetDate = new Date(`${matchDate}T${matchTime}`);
+  // Setup countdown - use useMemo to prevent re-creation of date object on every render
+  const targetDate = React.useMemo(() => new Date(`${matchDate}T${matchTime}`), [matchDate, matchTime]);
   const countdown = useCountdown(targetDate);
   const isStarted = countdown.isComplete;
   
@@ -130,43 +130,61 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
           <Button
             variant="outline"
             className={cn(
-              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-secondary/10 border-gray-700",
-              selectedPrediction === 'home' && "bg-secondary/10 border-secondary",
+              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-green-900/30 border-gray-700",
+              selectedPrediction === 'home' && "bg-green-900/30 border-green-500",
               !isSelectableMatch && "opacity-70 cursor-not-allowed"
             )}
             onClick={() => handleBetSelection('home')}
             disabled={!isSelectableMatch}
           >
-            <span className="text-xs text-gray-400">Home</span>
-            <span className="font-semibold">{odds?.home || '2.00'}</span>
+            <span className={cn(
+              "text-xs text-gray-400",
+              selectedPrediction === 'home' && "text-green-400"
+            )}>Home</span>
+            <span className={cn(
+              "font-semibold",
+              selectedPrediction === 'home' && "text-green-400"
+            )}>{odds?.home || '2.00'}</span>
           </Button>
           
           <Button
             variant="outline"
             className={cn(
-              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-secondary/10 border-gray-700",
-              selectedPrediction === 'draw' && "bg-secondary/10 border-secondary",
+              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-green-900/30 border-gray-700",
+              selectedPrediction === 'draw' && "bg-green-900/30 border-green-500",
               !isSelectableMatch && "opacity-70 cursor-not-allowed"
             )}
             onClick={() => handleBetSelection('draw')}
             disabled={!isSelectableMatch}
           >
-            <span className="text-xs text-gray-400">Draw</span>
-            <span className="font-semibold">{odds?.draw || '3.00'}</span>
+            <span className={cn(
+              "text-xs text-gray-400",
+              selectedPrediction === 'draw' && "text-green-400"
+            )}>Draw</span>
+            <span className={cn(
+              "font-semibold",
+              selectedPrediction === 'draw' && "text-green-400"
+            )}>{odds?.draw || '3.00'}</span>
           </Button>
           
           <Button
             variant="outline"
             className={cn(
-              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-secondary/10 border-gray-700",
-              selectedPrediction === 'away' && "bg-secondary/10 border-secondary",
+              "flex flex-col h-auto py-2 bg-dark-200 hover:bg-green-900/30 border-gray-700",
+              selectedPrediction === 'away' && "bg-green-900/30 border-green-500",
               !isSelectableMatch && "opacity-70 cursor-not-allowed"
             )}
             onClick={() => handleBetSelection('away')}
             disabled={!isSelectableMatch}
           >
-            <span className="text-xs text-gray-400">Away</span>
-            <span className="font-semibold">{odds?.away || '4.00'}</span>
+            <span className={cn(
+              "text-xs text-gray-400",
+              selectedPrediction === 'away' && "text-green-400"
+            )}>Away</span>
+            <span className={cn(
+              "font-semibold",
+              selectedPrediction === 'away' && "text-green-400"
+            )}>{odds?.away || '4.00'}</span>
           </Button>
         </div>
         
