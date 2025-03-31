@@ -20,13 +20,15 @@ export function LiveFeed() {
   // Update transactions every 10 seconds
   useEffect(() => {
     setTransactions(data);
-    
+  }, [data]);
+  
+  useEffect(() => {
     const interval = setInterval(() => {
       refetch();
     }, 10000);
     
     return () => clearInterval(interval);
-  }, [data, refetch]);
+  }, [refetch]);
   
   // Format time difference
   const formatTimeDiff = (date: Date) => {

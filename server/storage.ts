@@ -63,21 +63,35 @@ export class MemStorage implements IStorage {
   }
 
   private initializeVirtualTransactions() {
+    // Generate over 300 virtual transactions with different user names
     const usernames = [
-      'Johnson_123', 'SportsKing', 'FootieExpert', 'BettingPro', 'PredictionGuru',
-      'FootballFan', 'BetMaster', 'LuckyWinner', 'SoccerPro', 'GoalDigger',
-      'BetChampion', 'MatchWinner', 'SportsFanatic', 'FootballWiz', 'GoalKeeper'
+      'SoccerPro', 'FootieKing', 'BetMaster', 'GoalHunter', 'BallWizard',
+      'StrikerFC', 'PitchMaster', 'TopScorer', 'FootballFan', 'BettingKing',
+      'LuckyWinner', 'GoalScorer', 'CupWinner', 'ChampionBet', 'BigWinner',
+      'PremiumUser', 'EliteGamer', 'FootballGuru', 'SportsMaster', 'WinnerCircle',
+      'TopBettor', 'GoldenBoot', 'PremierFan', 'VictoryLane', 'ChampionsLeague',
+      'WorldCupFan', 'TrophyWinner', 'SportsBaron', 'LeagueMaster', 'PenaltyKing',
+      'FreeKickPro', 'HeaderSpecialist', 'MidfielderPro', 'DefenderElite', 'GoalieKing',
+      'CornerTaker', 'PenaltyTaker', 'FootballIcon', 'SportsStar', 'LeagueHero',
+      'Johnson_123', 'SportsKing', 'FootieExpert', 'BettingPro', 'PredictionGuru'
     ];
     
-    const amounts = [30000, 35000, 42000, 31500, 45000, 38000, 50000, 33000, 40000, 46000];
+    const amounts = [3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12000, 15000, 18000, 20000, 26000, 30000];
+    const currentTime = new Date();
     
-    for (let i = 0; i < 50; i++) {
-      const username = usernames[Math.floor(Math.random() * usernames.length)];
-      const amount = amounts[Math.floor(Math.random() * amounts.length)];
+    // Create 300+ transactions with random users and amounts
+    for (let i = 0; i < 320; i++) {
+      const randomUsername = usernames[Math.floor(Math.random() * usernames.length)];
+      const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
+      
+      const timestamp = new Date(currentTime);
+      // Space them out by random minutes (1-30 minutes apart)
+      timestamp.setMinutes(timestamp.getMinutes() - (i * Math.floor(Math.random() * 30) + 1));
       
       this.createVirtualTransaction({
-        username,
-        amount
+        username: randomUsername,
+        amount: randomAmount,
+        timestamp: timestamp
       });
     }
   }
@@ -168,7 +182,26 @@ export class MemStorage implements IStorage {
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
     const id = this.transactionIdCounter++;
     const now = new Date();
-    const newTransaction: Transaction = { ...transaction, id, createdAt: now };
+    
+    // Ensure status is set to a default value if not provided
+    const status = transaction.status || 'pending';
+    // Ensure other nullable fields have default values
+    const details = transaction.details ?? null;
+    const bankName = transaction.bankName ?? null;
+    const accountNumber = transaction.accountNumber ?? null;
+    const accountName = transaction.accountName ?? null;
+    
+    const newTransaction: Transaction = { 
+      ...transaction, 
+      id, 
+      createdAt: now,
+      status,
+      details,
+      bankName,
+      accountNumber,
+      accountName
+    };
+    
     this.transactions.set(id, newTransaction);
     return newTransaction;
   }

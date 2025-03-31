@@ -78,7 +78,6 @@ export const insertTransactionSchema = createInsertSchema(transactions).omit({
 
 export const insertVirtualTransactionSchema = createInsertSchema(virtualTransactions).omit({
   id: true,
-  timestamp: true,
 });
 
 export const insertMatchCacheSchema = createInsertSchema(matchCache).omit({

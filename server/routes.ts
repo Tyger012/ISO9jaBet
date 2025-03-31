@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import session from "express-session";
 import MemoryStore from "memorystore";
 import bcrypt from "bcryptjs";
@@ -7,7 +7,23 @@ import { storage } from "./storage";
 import { fetchMatches, fetchUpcomingMatches, checkMatchResults } from "./api";
 import { sendWithdrawalEmail, spinLuckyWheel, isSameDay, validateVIPCode, validateWithdrawalCode } from "./utils";
 import { z } from "zod";
-import { insertUserSchema } from "@shared/schema";
+import { insertUserSchema, User } from "@shared/schema";
+
+// Extend Express Request type to include user
+declare global {
+  namespace Express {
+    interface Request {
+      user: User;
+    }
+  }
+}
+
+// Extend Session to include userId
+declare module 'express-session' {
+  interface SessionData {
+    userId: number;
+  }
+}
 
 const MemoryStoreSession = MemoryStore(session);
 
@@ -501,7 +517,7 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
   // Virtual transactions for the feed
   app.get("/api/virtual-transactions", async (req, res) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 20;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
       const transactions = await storage.getVirtualTransactions(limit);
       res.json(transactions);
     } catch (error) {
