@@ -29,7 +29,7 @@ export function LuckyWheel({
   const getResultRotation = () => {
     // Each option takes up a portion of the wheel
     // The wheel is divided into 6 segments
-    if (result === undefined) return 0;
+    if (result === undefined || isSpinning === false) return 0;
     
     // Map result to segment
     const segmentMap: Record<number, number> = {
@@ -43,7 +43,7 @@ export function LuckyWheel({
     
     // Add some randomness within the segment
     const baseRotation = segmentMap[result] || 0;
-    const randomOffset = Math.random() * 50 - 25; // random offset between -25 and 25 degrees
+    const randomOffset = Math.random() * 40 - 20; // random offset between -20 and 20 degrees
     
     // Add multiple rotations for effect (5 full rotations plus the target position)
     return 1800 + baseRotation + randomOffset;

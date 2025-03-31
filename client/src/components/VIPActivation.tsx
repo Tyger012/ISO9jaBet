@@ -137,7 +137,7 @@ export function VIPActivation() {
                   {activateVip.isPending ? 'Activating...' : 'Activate VIP'}
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">VIP Activation Key: ISO9</p>
+              <p className="text-xs text-gray-500 mt-2">VIP Activation Key: Enter activation code provided by admin</p>
             </div>
           </CardContent>
         </Card>

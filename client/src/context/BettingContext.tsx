@@ -1,6 +1,7 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { Match } from '@shared/schema';
 import { useMatches } from '@/hooks/useMatches';
+import { useAuth } from '@/context/AuthContext';
 
 interface BettingContextType {
   selectedBets: Array<{
@@ -47,8 +48,9 @@ export function BettingProvider({ children }: { children: ReactNode }) {
   
   const isLoading = isLoadingMatches || isLoadingBets;
   
-  // Get user VIP status
-  const isVip = false; // This should come from user context
+  // Get user VIP status from auth context
+  const { user } = useAuth();
+  const isVip = user?.isVip || false;
   
   // Calculate potential return and loss
   const winAmount = isVip ? 7500 : 5000;
@@ -59,6 +61,12 @@ export function BettingProvider({ children }: { children: ReactNode }) {
   const addBet = (matchId: string, prediction: string, odds: string, match: Match) => {
     // Check if already in selected bets
     const existingIndex = selectedBets.findIndex(bet => bet.matchId === matchId);
+    
+    // Check for max bet limit based on VIP status
+    const maxBets = isVip ? 4 : 2;
+    if (selectedBets.length >= maxBets && existingIndex === -1) {
+      return; // Cannot add more bets beyond the limit
+    }
     
     if (existingIndex !== -1) {
       // Update the existing bet

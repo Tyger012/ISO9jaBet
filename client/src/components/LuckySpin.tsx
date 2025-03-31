@@ -10,8 +10,8 @@ export function LuckySpin() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinResult, setSpinResult] = useState<number | null>(null);
   
-  // Check if user is eligible to spin
-  const canSpin = user && user.balance < 2000;
+  // Every user can spin once per 24 hours regardless of balance
+  const canSpin = !!user;
   
   // Format date to check if user has spun today
   const today = new Date();
@@ -24,7 +24,7 @@ export function LuckySpin() {
   const handleSpin = async () => {
     if (!canSpin || hasSpunToday) {
       let message = !canSpin 
-        ? 'Your balance must be below ₦2,000 to use the Lucky Spin' 
+        ? 'You must be logged in to use the Lucky Spin' 
         : 'You\'ve already used your free spin today';
       
       toast({
@@ -74,14 +74,14 @@ export function LuckySpin() {
             <Button 
               className="px-6 py-3 bg-accent hover:bg-accent/90 text-white font-semibold shadow-lg"
               onClick={handleSpin}
-              disabled={isSpinning || !canSpin || hasSpunToday}
+              disabled={isSpinning || (canSpin === false) || hasSpunToday}
             >
               {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
             </Button>
             <p className="text-xs text-gray-400 mt-2">
               {hasSpunToday 
                 ? 'You\'ve already used your spin today. Come back tomorrow!' 
-                : '1 free spin available daily when balance is below ₦2,000'}
+                : '1 free spin available daily. Spin to earn money!'}
             </p>
           </div>
           

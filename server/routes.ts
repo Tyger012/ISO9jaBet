@@ -169,8 +169,8 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
       if (pendingBets.length >= betLimit) {
         return res.status(400).json({ 
           message: user.isVip 
-            ? "You can only place up to 4 pending bets at a time" 
-            : "You can only place up to 2 pending bets at a time"
+            ? "VIP members can only bet on up to 4 matches at a time" 
+            : "Free users can only bet on up to 2 matches at a time. Upgrade to VIP for more!"
         });
       }
       
@@ -290,10 +290,8 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
       
-      // Check if user's balance is low enough to spin
-      if (user.balance >= 2000) {
-        return res.status(400).json({ message: "Your balance must be below ₦2,000 to use the Lucky Spin" });
-      }
+      // All users can use the spin once per day
+      // We no longer check balance requirement
       
       // Check if user has spun today
       const today = new Date();
