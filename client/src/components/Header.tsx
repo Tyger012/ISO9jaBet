@@ -1,116 +1,82 @@
-import { FC } from "react";
-import { Link, useLocation } from "wouter";
-import { useAuthStore } from "../lib/auth";
-import { formatCurrency } from "../lib/formatters";
-import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { User, LogOut, Settings } from "lucide-react";
+import React from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { LogOut, Settings, User } from 'lucide-react';
+import { Link } from 'wouter';
 
-interface TabItem {
-  name: string;
-  path: string;
-}
-
-const tabs: TabItem[] = [
-  { name: "Home", path: "/" },
-  { name: "My Bets", path: "/my-bets" },
-  { name: "Leaderboard", path: "/leaderboard" },
-  { name: "Withdraw", path: "/withdraw" },
-  { name: "VIP", path: "/vip" },
-  { name: "Lucky Spin", path: "/lucky-spin" }
-];
-
-const Header: FC = () => {
-  const [location] = useLocation();
-  const { user, logout } = useAuthStore();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+export function Header() {
+  const { user, logout } = useAuth();
+  
+  const userInitials = user?.username 
+    ? user.username.slice(0, 2).toUpperCase() 
+    : 'U';
+    
+  const userBalance = user?.balance ? user.balance.toLocaleString() : '0';
+  const isVip = user?.isVip || false;
+  
+  const handleLogout = () => {
+    logout.mutate();
   };
-
+  
   return (
-    <>
-      <header className="bg-gray-900 sticky top-0 z-50 shadow-md">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <Link href="/">
-                <a className="text-emerald-500 font-bold text-xl md:text-2xl">
-                  ISO9ja<span className="text-gray-100">Bet</span>
-                </a>
-              </Link>
-            </div>
-            
-            <div className="flex items-center">
-              {user && (
-                <div className="hidden md:flex items-center mr-4">
-                  <span className="text-gray-100 mr-2">Balance:</span>
-                  <span className="text-emerald-500 font-bold">{formatCurrency(user.balance)}</span>
-                </div>
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="rounded-full py-1 px-3 text-gray-100 hover:bg-gray-800">
-                    <span className="mr-2 hidden md:inline">{user?.username || "Guest"}</span>
-                    <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-gray-900">
-                      {user?.username ? user.username.substring(0, 2).toUpperCase() : "GU"}
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  {user && (
-                    <>
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Settings</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                    </>
-                  )}
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Logout</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+    <header className="bg-dark-200 shadow-md">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link href="/">
+          <a className="flex items-center space-x-2">
+            <span className="text-accent font-heading font-bold text-2xl">ISO9ja<span className="text-primary">Bet</span></span>
+          </a>
+        </Link>
+        
+        <div className="flex items-center space-x-3">
+          {/* Balance Display */}
+          <div className="flex flex-col items-end">
+            <span className="text-xs text-gray-400">Balance</span>
+            <span className="font-heading font-bold text-lg text-white">₦{userBalance}</span>
           </div>
-        </div>
-      </header>
-      
-      <div className="bg-gray-800 text-gray-100">
-        <div className="container mx-auto px-4">
-          <nav className="flex overflow-x-auto">
-            {tabs.map((tab) => (
-              <Link key={tab.path} href={tab.path}>
-                <a className={`px-4 py-3 font-medium border-b-2 whitespace-nowrap ${
-                  location === tab.path 
-                    ? "border-emerald-500 text-emerald-500" 
-                    : "border-transparent hover:text-emerald-500"
-                }`}>
-                  {tab.name}
-                </a>
-              </Link>
-            ))}
-          </nav>
+          
+          {/* User Avatar/Menu Trigger */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="relative cursor-pointer">
+                <Avatar className="h-10 w-10 bg-dark-50 border border-gray-700">
+                  <AvatarFallback className="text-sm font-medium">{userInitials}</AvatarFallback>
+                </Avatar>
+                {isVip && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center bg-accent rounded-full text-[10px] text-white font-bold">
+                    VIP
+                  </span>
+                )}
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40 bg-dark-50 border-gray-700">
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/profile">
+                  <a className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>Profile</span>
+                  </a>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/wallet">
+                  <a className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    <span>Settings</span>
+                  </a>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                className="cursor-pointer text-red-400 focus:text-red-400" 
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
-    </>
+    </header>
   );
-};
-
-export default Header;
+}

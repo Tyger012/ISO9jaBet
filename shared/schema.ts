@@ -1,107 +1,74 @@
-import { pgTable, text, serial, integer, boolean, timestamp, json, doublePrecision } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Users table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  balance: integer("balance").default(10000).notNull(),
-  isVip: boolean("is_vip").default(false).notNull(),
-  totalWins: integer("total_wins").default(0).notNull(),
-  totalLosses: integer("total_losses").default(0).notNull(),
+  balance: integer("balance").notNull().default(5000),
+  isVip: boolean("is_vip").notNull().default(false),
+  lastSpinDate: timestamp("last_spin_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const matches = pgTable("matches", {
+// Bets table
+export const bets = pgTable("bets", {
   id: serial("id").primaryKey(),
-  eventKey: text("event_key").notNull().unique(),
-  eventDate: text("event_date").notNull(),
-  eventTime: text("event_time").notNull(),
-  eventHomeTeam: text("event_home_team").notNull(),
-  homeTeamKey: text("home_team_key").notNull(),
-  eventAwayTeam: text("event_away_team").notNull(),
-  awayTeamKey: text("away_team_key").notNull(),
-  eventStatus: text("event_status").notNull(),
-  eventFinalResult: text("event_final_result"),
-  countryName: text("country_name").notNull(),
-  leagueName: text("league_name").notNull(),
-  leagueKey: text("league_key").notNull(),
-  homeTeamLogo: text("home_team_logo"),
-  awayTeamLogo: text("away_team_logo"),
-  homeOdds: doublePrecision("home_odds").notNull(),
-  drawOdds: doublePrecision("draw_odds").notNull(),
-  awayOdds: doublePrecision("away_odds").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const predictions = pgTable("predictions", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  matchId: integer("match_id").notNull().references(() => matches.id),
-  prediction: text("prediction").notNull(), // 'home', 'draw', 'away'
-  odds: doublePrecision("odds").notNull(),
-  result: text("result"), // 'win', 'loss', 'pending'
-  amount: integer("amount"), // amount won/lost
+  userId: integer("user_id").notNull(),
+  matchId: text("match_id").notNull(),
+  prediction: text("prediction").notNull(), // "home", "draw", "away"
+  odds: text("odds").notNull(),
+  status: text("status").notNull().default("pending"), // "pending", "won", "lost"
+  amount: integer("amount").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Transactions table
 export const transactions = pgTable("transactions", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  type: text("type").notNull(), // 'win', 'loss', 'withdrawal', 'vip', 'spin'
+  userId: integer("user_id").notNull(),
+  type: text("type").notNull(), // "deposit", "withdrawal", "win", "loss", "lucky_spin"
   amount: integer("amount").notNull(),
   details: text("details"),
+  status: text("status").notNull().default("pending"), // "pending", "completed", "failed"
+  bankName: text("bank_name"),
+  accountNumber: text("account_number"),
+  accountName: text("account_name"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const withdrawalRequests = pgTable("withdrawal_requests", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  amount: integer("amount").notNull(),
-  accountNumber: text("account_number").notNull(),
-  bankName: text("bank_name").notNull(),
-  accountName: text("account_name").notNull(),
-  status: text("status").default("pending").notNull(), // 'pending', 'approved', 'rejected'
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const luckySpins = pgTable("lucky_spins", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
-  amount: integer("amount").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
+// Virtual transactions for the feed
 export const virtualTransactions = pgTable("virtual_transactions", {
   id: serial("id").primaryKey(),
   username: text("username").notNull(),
-  type: text("type").notNull(), // 'withdrawal', 'win', 'vip', 'spin'
   amount: integer("amount").notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+// Match cache to minimize API calls
+export const matchCache = pgTable("match_cache", {
+  id: serial("id").primaryKey(),
+  data: jsonb("data").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// Insert schemas
+// Schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
-  createdAt: true,
-  isVip: true,
-  totalWins: true,
-  totalLosses: true,
   balance: true,
-});
-
-export const insertMatchSchema = createInsertSchema(matches).omit({
-  id: true,
-  updatedAt: true,
-});
-
-export const insertPredictionSchema = createInsertSchema(predictions).omit({
-  id: true,
+  isVip: true,
+  lastSpinDate: true,
   createdAt: true,
-  result: true,
-  amount: true,
+});
+
+export const insertBetSchema = createInsertSchema(bets).omit({
+  id: true,
+  status: true,
+  createdAt: true,
 });
 
 export const insertTransactionSchema = createInsertSchema(transactions).omit({
@@ -109,18 +76,12 @@ export const insertTransactionSchema = createInsertSchema(transactions).omit({
   createdAt: true,
 });
 
-export const insertWithdrawalRequestSchema = createInsertSchema(withdrawalRequests).omit({
-  id: true,
-  createdAt: true,
-  status: true,
-});
-
-export const insertLuckySpinSchema = createInsertSchema(luckySpins).omit({
-  id: true,
-  createdAt: true,
-});
-
 export const insertVirtualTransactionSchema = createInsertSchema(virtualTransactions).omit({
+  id: true,
+  timestamp: true,
+});
+
+export const insertMatchCacheSchema = createInsertSchema(matchCache).omit({
   id: true,
   createdAt: true,
 });
@@ -129,20 +90,43 @@ export const insertVirtualTransactionSchema = createInsertSchema(virtualTransact
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
-export type Match = typeof matches.$inferSelect;
-export type InsertMatch = z.infer<typeof insertMatchSchema>;
-
-export type Prediction = typeof predictions.$inferSelect;
-export type InsertPrediction = z.infer<typeof insertPredictionSchema>;
+export type Bet = typeof bets.$inferSelect;
+export type InsertBet = z.infer<typeof insertBetSchema>;
 
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 
-export type WithdrawalRequest = typeof withdrawalRequests.$inferSelect;
-export type InsertWithdrawalRequest = z.infer<typeof insertWithdrawalRequestSchema>;
-
-export type LuckySpin = typeof luckySpins.$inferSelect;
-export type InsertLuckySpin = z.infer<typeof insertLuckySpinSchema>;
-
 export type VirtualTransaction = typeof virtualTransactions.$inferSelect;
 export type InsertVirtualTransaction = z.infer<typeof insertVirtualTransactionSchema>;
+
+export type MatchCache = typeof matchCache.$inferSelect;
+export type InsertMatchCache = z.infer<typeof insertMatchCacheSchema>;
+
+// API types
+export type Match = {
+  event_key: string;
+  event_date: string;
+  event_time: string;
+  event_home_team: string;
+  event_away_team: string;
+  event_halftime_result: string;
+  event_final_result: string;
+  event_status: string;
+  country_name: string;
+  league_name: string;
+  league_key: string;
+  home_team_logo: string;
+  away_team_logo: string;
+  odds?: {
+    home: string;
+    draw: string;
+    away: string;
+  };
+};
+
+export type LeaderboardUser = {
+  id: number;
+  username: string;
+  balance: number;
+  isVip: boolean;
+};
