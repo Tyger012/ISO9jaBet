@@ -1,0 +1,526 @@
+admin email: denzelbennie@outlook.com
+
+ https://apiv2.allsportsapi.com/football/?met=Countries&APIkey=!_your_account_APIkey_!
+
+
+API: 56a8fee0f6dd264caa27f72a5beb0d233e7b6aa366a5906a8d31db1285096196
+
+
+Deposit account details
+Account Number: 6100827551 
+Bank: OPay
+Account Name:OMOBANKE JUMOKE ADEKAYERO
+
+SMTP detials
+
+pass: sphw oizv szzy fpgw
+user: coastalloan60@gmail.com
+port: 465
+host: smtp.gmail.com
+
+
+
+ISO9jaBet - Match Prediction & Betting Platform
+
+Project Overview
+
+ISO9jaBet is a football prediction platform where users can predict matches and win real cash without depositing any money. The system integrates a Live Score API to fetch daily matches, display odds, and provide a countdown timer for each match.
+
+Users can predict two matches at a time. If their predictions are correct, they win ₦5,000 per match, which is automatically credited to their balance. If a user loses a prediction, ₦2,000 is deducted from their balance.
+
+To make the game more engaging, a Random Lucky Spin Feature allows users to win bonus cash when they run out of balance, encouraging continuous participation. A VIP Activation System is also included for premium benefits.
+
+⸻
+
+Core Features
+
+1. User Registration & Authentication
+	•	Secure login system (Username, Email, Password).
+	•	Session management to keep users logged in.
+	•	Users can view their betting history & transaction records.
+
+⸻
+
+2. Match Prediction & Betting System
+	•	Users predict 2 matches at a time.
+	•	No deposit required—users bet for free to earn real cash.
+	•	Live match odds, start date, and time fetched via API.
+	•	If a user wins:
+	•	₦5,000 per match is credited to their balance.
+	•	If a user loses:
+	•	₦2,000 is deducted from their balance.
+	•	If the user’s balance is ₦0, they must win a Lucky Spin or a bet to continue betting.
+	•	Countdown timer UI for upcoming match start times.
+
+⸻
+
+3. Live Score API Integration
+	•	Fetches daily football matches from the API.
+	•	Displays match details:
+	•	Match start date & time
+	•	Team names & odds
+	•	Countdown timer UI to show time left before matches start.
+
+API: AllSportsAPI
+
+⸻
+
+4. Betting History & Result Tracking
+	•	Users can view their betting history with:
+	•	Match details (teams, date, time, odds).
+	•	Win/Loss record with corresponding earnings.
+	•	Winning users: See a Trophy UI after a successful prediction.
+	•	Losing users: See a Loss Emoji UI after a failed prediction.
+
+⸻
+
+5. VIP Activation System
+	•	Users must send ₦5,000 to ISO9jaBet account to unlock VIP.
+	•	A VIP Activation Key (ISO9) is required to activate VIP status.
+	•	Once activated, the user’s profile is updated automatically with a blue badge labeled “VIP User”.
+	•	VIP Benefits:
+	•	Bet on 4 matches at once instead of 2.
+	•	Increase winnings to ₦7,500 per match instead of ₦5,000.
+	•	Reduce loss penalty to ₦1,000 instead of ₦2,000.
+
+⸻
+
+6. Withdrawal System & Activation Key
+	•	Users can only withdraw when balance reaches ₦30,000.
+	•	If balance is below ₦30,000, display:
+“Keep predicting until your balance reaches ₦30,000 to withdraw.”
+	•	Withdrawal Process:
+	1.	User clicks withdraw.
+	2.	₦3,000 Account Box Breaking Fee is required to proceed.
+	3.	User enters withdrawal details:
+	•	Account Number
+	•	Bank Name
+	•	Account Name
+	•	Amount to Withdraw
+	4.	Request is sent to representatives via email for manual processing.
+	5.	Before finalizing, user enters a Withdrawal Activation Key.
+	•	Default code: 197200.
+	6.	If correct, withdrawal is approved and balance is deducted.
+
+⸻
+
+7. Virtual Transactions & Live Engagement Box scrolling  Field 
+	•	300+ Virtual Users with different usernames and withdrawal amounts.
+	•	Live withdrawal feed showing ongoing transactions.
+	•	Virtual user transactions create social proof & engagement.
+
+⸻
+
+8. Random Lucky Spin Feature (Bonus Cash)
+	•	Users get 1 free spin per day if their balance is below ₦2,000.
+	•	Possible rewards from spinning:
+	•	₦3,000 (40% chance)
+	•	₦4,000 (20% chance)
+	•	₦5,000 (15% chance)
+	•	₦6,000 (10% chance)
+	•	₦7,000 (10% chance)
+	•	₦8,000 (5% chance)
+	•	If the user wins, the amount is credited to their balance immediately.
+	•	Bonus cash can only be used for betting, not withdrawals.
+
+⸻
+
+9. Social Leaderboard & Competition
+	•	Top 10 players with the highest winnings are displayed.
+	•	Users can challenge friends to bet together.
+	•	Monthly leaderboard winner gets ₦50,000 bonus.
+
+
+
+Component
+Technology Used
+Backend
+Python (Flask/Django)
+Frontend
+HTML, CSS, JavaScript (React/Vue)
+Database
+PostgreSQL / MySQL
+API
+Live Score API (AllSportsAPI)
+Email
+SMTP for withdrawal notifications
+
+User Journey Example
+
+1. Betting Flow:
+	•	User logs in.
+	•	Selects 2 matches from the available list.
+	•	Clicks “Place Bet”.
+	•	Match countdown timer starts.
+	•	If both predictions are correct:
+	•	₦5,000 per match is credited to the user’s balance.
+	•	Winning Trophy UI is displayed.
+	•	If incorrect:
+	•	₦2,000 is deducted from balance.
+	•	Loss Emoji UI is displayed.
+
+2. Random Lucky Spin Flow:
+	•	If balance is below ₦2,000, the Lucky Spin is unlocked.
+	•	User spins and lands on ₦3,000 - ₦8,000.
+	•	Amount is credited to balance for betting.
+
+3. VIP Activation Flow:
+	•	User sends ₦5,000 to the ISO9jaBet account.
+	•	User enters VIP Activation Key (“ISO9”).
+	•	If correct, user profile is updated with a blue badge (VIP User).
+	•	User now has VIP benefits.
+
+4. Withdrawal Flow:
+	•	User’s balance reaches ₦30,000.
+	•	Clicks “Withdraw”.
+	•	Sees message:
+“To unlock withdrawal, pay a ₦3,000 Account Box Breaking Fee.”
+	•	Proceeds to withdrawal form:
+	•	Account Number
+	•	Bank Name
+	•	Account Name
+	•	Amount to Withdraw
+	•	System sends withdrawal request via email to the admin.
+	•	User enters Withdrawal Activation Key (Default: 197200).
+	•	If correct, withdrawal is approved and balance is deducted.
+
+
+add more than 300 match and used the api to track them display user betting live perfomance  goals score count ; player name score display  notification pop when a themes scores more than a betting platform 
+
+All sport json idea 
+
+{
+  "success": 1,
+  "result": [
+  {
+        "event_key": "59409",
+        "event_date": "2021-05-18",
+        "event_time": "20:30",
+        "event_home_team": "Lazio",
+        "home_team_key": "93",
+        "event_away_team": "Torino",
+        "away_team_key": "4973",
+        "event_halftime_result": "0 - 0",
+        "event_final_result": "0 - 0",
+        "event_ft_result": "0 - 0",
+        "event_penalty_result": "",
+        "event_status": "Finished",
+        "country_name": "Italy",
+        "league_name": "Serie A",
+        "league_key": "207",
+        "league_round": "Round 25",
+        "league_season": "2020/2021",
+        "event_live": "0",
+        "event_stadium": "Stadio Olimpico (Roma)",
+        "event_referee": "M. Fabbri",
+        "home_team_logo": "https://apiv2.allsportsapi.com/logo/93_lazio.jpg",
+        "away_team_logo": "https://apiv2.allsportsapi.com/logo/4973_torino.jpg",
+        "event_country_key": "5",
+        "league_logo": "https://apiv2.allsportsapi.com/logo/logo_leagues/207_serie-a.png",
+        "country_logo": "https://apiv2.allsportsapi.com/logo/logo_country/5_italy.png",
+        "event_home_formation": "",
+        "event_away_formation": "",
+        "fk_stage_key": "331",
+        "stage_name": "Current",
+        "league_group": "",
+        "goalscorers": [],
+        "substitutes": [
+            {
+                "time": "61",
+                "home_scorer": {
+                    "in": "M. Fares",
+                    "out": "S. Lulic"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            {
+                "time": "68",
+                "home_scorer": {
+                    "in": "Lucas Leiva",
+                    "out": "G. Escalante"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            .................
+        ],
+        "cards": [
+            {
+                "time": "28",
+                "home_fault": "T. Strakosha",
+                "card": "yellow card",
+                "away_fault": ""
+            },
+            ..................
+        ],
+        "lineups": {
+            "home_team": {
+                "starting_lineups": [
+                    {
+                        "player": "Thomas Strakosha",
+                        "player_number": "1",
+                        "player_position": "1",
+                        "player_country": null,
+                        "player_key": "979073766"
+                    },
+                    {
+                        "player": "Adam Marusic",
+                        "player_number": "77",
+                        "player_position": "2",
+                        "player_country": null,
+                        "player_key": "988865105"
+                    },
+                    ..........................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Pepe Reina",
+                        "player_number": "25",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "926105079"
+                    },
+                    {
+                        "player": "Marco Alia",
+                        "player_number": "71",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "3598033023"
+                    },
+                    ......................
+                ],
+                "coaches": [
+                    {
+                        "coache": "S. Inzaghi",
+                        "coache_country": null
+                    }
+                ],
+                "missing_players": []
+            },
+            "away_team": {
+                "starting_lineups": [
+                    {
+                        "player": "Salvatore Sirigu",
+                        "player_number": "39",
+                        "player_position": "1",
+                        "player_country": null,
+                        "player_key": "72635334"
+                    },
+                    {
+                        "player": "Armando Izzo",
+                        "player_number": "5",
+                        "player_position": "2",
+                        "player_country": null,
+                        "player_key": "3292395742"
+                    },
+                    ............................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Vanja Milinkovic-Savic",
+                        "player_number": "32",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "3036656066"
+                    },
+                    {
+                        "player": "Samir Ujkani",
+                        "player_number": "18",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "1358621159"
+                    },
+                    ..................................
+                ],
+                "coaches": [
+                    {
+                        "coache": "D. Nicola",
+                        "coache_country": null
+                    }
+                ],
+                "missing_players": []
+            }
+        },
+        "statistics": [
+            {
+                "type": "Shots Total",
+                "home": "24",
+                "away": "6"
+            },
+            {
+                "type": "Shots On Goal",
+                "home": "7",
+                "away": "3"
+            },
+            {
+                "type": "Shots Off Goal",
+                "home": "12",
+                "away": "3"
+            },
+            ...................
+        ]
+    }
+.......
+  ]
+}
+
+
+
+
+[
+  {
+        "event_key": "11205",
+        "event_date": "2021-05-21",
+        "event_time": "11:05",
+        "event_home_team": "Newcastle Jets",
+        "home_team_key": "1056",
+        "event_away_team": "Brisbane Roar",
+        "away_team_key": "399",
+        "event_halftime_result": "0 - 1",
+        "event_final_result": "1 - 2",
+        "event_ft_result": "1 - 2",
+        "event_penalty_result": "",
+        "event_status": "74",
+        "country_name": "Australia",
+        "league_name": "A-League - Regular Season",
+        "league_key": "49",
+        "league_round": "22",
+        "league_season": "",
+        "event_live": "1",
+        "event_stadium": "McDonald Jones Stadium",
+        "event_referee": "",
+        "event_country_key": "17",
+        "league_logo": "https://apiv2.allsportsapi.com/logo/logo_leagues/49_a-league.png",
+        "country_logo": "https://apiv2.allsportsapi.com/logo/logo_country/17_australia.png",
+        "event_home_formation": "",
+        "event_away_formation": "",
+        "fk_stage_key": "528",
+        "stage_name": "Regular Season",
+        "goalscorers": [
+            {
+                "time": "34",
+                "home_scorer": "",
+                "score": "0 - 1",
+                "away_scorer": "R. Danzaki"
+            },
+            {
+                "time": "61",
+                "home_scorer": "J. O'Shea (o.g.)",
+                "score": "1 - 1",
+                "away_scorer": ""
+            },
+            {
+                "time": "73",
+                "home_scorer": "",
+                "score": "1 - 2",
+                "away_scorer": "J. O'Shea"
+            }
+        ],
+        "cards": [
+            {
+                "time": "21",
+                "home_fault": "",
+                "card": "yellow card",
+                "away_fault": "M. Gillesphey"
+            },
+            {
+                "time": "42",
+                "home_fault": "J. Hoffman",
+                "card": "yellow card",
+                "away_fault": ""
+            },
+            ........................
+        ],
+        "substitutes": [
+            {
+                "time": "46",
+                "home_scorer": {
+                    "in": "C. O'Toole",
+                    "out": "L. Mauragis"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            {
+                "time": "46",
+                "home_scorer": {
+                    "in": "A. Abbas",
+                    "out": "A. Goodwin"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            ..............
+        ],
+        "lineups": {
+            "home_team": {
+                "starting_lineups": [
+                    {
+                        "player": "Jack Duncan",
+                        "player_number": "23",
+                        "player_country": null
+                    },
+                    {
+                        "player": "Johnny Koutroumbis",
+                        "player_number": "2",
+                        "player_country": null
+                    },
+                    .......................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Lewis Italiano",
+                        "player_number": "1",
+                        "player_country": null
+                    },
+                    {
+                        "player": "Lachlan Jackson",
+                        "player_number": "22",
+                        "player_country": null
+                    },
+                    .................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Macklin Freke",
+                        "player_number": "1",
+                        "player_country": null
+                    },
+                    {
+                        "player": "Antonee Burke-Gilroy",
+                        "player_number": "22",
+                        "player_country": null
+                    },
+                    ..................
+                ],
+                "coaches": [
+                    {
+                        "coache": "W. Moon",
+                        "coache_country": null
+                    }
+                ]
+            }
+        },
+        "statistics": [
+            {
+                "type": "Shots Blocked",
+                "home": "1",
+                "away": "6"
+            },
+            {
+                "type": "Shots Inside Box",
+                "home": "3",
+                "away": "8"
+            },
+            {
+                "type": "Shots Outside Box",
+                "home": "3",
+                "away": "8"
+            },
+            ..................
+        ]
+  },
+  .......
+]
+
