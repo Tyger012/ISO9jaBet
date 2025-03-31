@@ -119,9 +119,19 @@ export function VIPActivation() {
             
             <div className="mt-6 bg-dark-100 p-4 rounded-lg border border-gray-700">
               <h3 className="font-medium text-white">Activate VIP Status</h3>
-              <p className="text-sm text-gray-400 mt-1">Send ₦5,000 to the ISO9jaBet account and enter the activation key below</p>
+              <p className="text-sm text-gray-400 mt-1">Send ₦5,000 to purchase your VIP activation key</p>
               
-              <div className="mt-4 flex flex-col sm:flex-row gap-3">
+              <div className="mt-3 p-3 bg-dark-200 rounded border border-gray-600 mb-4">
+                <h4 className="text-sm font-medium text-accent mb-2">Payment Account Details</h4>
+                <div className="p-2 bg-dark-300 rounded text-xs">
+                  <p className="flex justify-between"><span className="text-gray-400">Bank:</span> <span className="text-white font-medium">OPay</span></p>
+                  <p className="flex justify-between"><span className="text-gray-400">Account Number:</span> <span className="text-white font-medium">6100827551</span></p>
+                  <p className="flex justify-between"><span className="text-gray-400">Account Name:</span> <span className="text-white font-medium">OMOBANKE JUMOKE ADEKAYERO</span></p>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">After payment, contact support to receive your activation key</p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   type="text"
                   placeholder="Enter activation key"
@@ -137,7 +147,7 @@ export function VIPActivation() {
                   {activateVip.isPending ? 'Activating...' : 'Activate VIP'}
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">VIP Activation Key: Enter activation code provided by admin</p>
+              <p className="text-xs text-gray-500 mt-2">VIP Activation Key: Use code "ISO9" after payment confirmation</p>
             </div>
           </CardContent>
         </Card>

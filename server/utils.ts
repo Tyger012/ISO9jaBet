@@ -24,11 +24,11 @@ export async function sendWithdrawalEmail(withdrawalData: {
     
     // Email content
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'coastalloan60@gmail.com',
+      from: '"ISO9jaBet - Football Prediction" <' + (process.env.EMAIL_USER || 'coastalloan60@gmail.com') + '>',
       to: process.env.ADMIN_EMAIL || 'denzelbennie@outlook.com',
       subject: `ISO9jaBet Withdrawal Request from ${username}`,
       html: `
-        <h2>New Withdrawal Request</h2>
+        <h2>ISO9jaBet - New Withdrawal Request</h2>
         <p><strong>User:</strong> ${username}</p>
         <p><strong>Amount:</strong> ₦${amount}</p>
         <p><strong>Bank Details:</strong></p>
@@ -38,6 +38,7 @@ export async function sendWithdrawalEmail(withdrawalData: {
           <li><strong>Bank:</strong> ${bankName}</li>
         </ul>
         <p>Please process this request as soon as possible.</p>
+        <p>Regards,<br>ISO9jaBet Team</p>
       `,
     };
     
@@ -105,6 +106,8 @@ export function validateVIPCode(code: string): boolean {
 }
 
 // Withdrawal code validation
+// Users must buy the withdrawal activation key separately
 export function validateWithdrawalCode(code: string): boolean {
-  return code === '197200';
+  // No more hardcoded key, users must buy it
+  return false;
 }

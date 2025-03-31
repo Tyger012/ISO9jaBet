@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="48" fill="#4F46E5"/>
+  <circle cx="96" cy="96" r="68" fill="#1E1B4B" stroke="#FFFFFF" stroke-width="4"/>
+  <path d="M96 40 L119 77 L159 86 L129 115 L137 156 L96 137 L55 156 L63 115 L33 86 L73 77 Z" fill="#10B981" stroke="#FFFFFF" stroke-width="2"/>
+  <circle cx="96" cy="96" r="24" fill="#4F46E5" stroke="#FFFFFF" stroke-width="2"/>
+  <path d="M86 96 L94 104 L108 90" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="54" y="172" font-family="Arial" font-weight="bold" font-size="20" fill="#FFFFFF">ISO9jaBet</text>
+</svg>

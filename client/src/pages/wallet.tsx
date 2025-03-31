@@ -111,7 +111,7 @@ export default function Wallet() {
                     </li>
                     <li className="flex items-start">
                       <Info className="h-4 w-4 text-yellow-500 mr-2 mt-0.5" />
-                      <span>Withdrawal Activation Key required: <strong>197200</strong></span>
+                      <span>Withdrawal Activation Key purchase required: <strong>₦3,000</strong></span>
                     </li>
                   </ul>
                 </div>

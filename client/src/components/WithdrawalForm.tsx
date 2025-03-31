@@ -183,15 +183,41 @@ export function WithdrawalForm() {
                 
                 <div>
                   <Label className="block text-sm text-gray-400 mb-1">Withdrawal Activation Key</Label>
-                  <Input
-                    type="text"
-                    name="activationKey"
-                    placeholder="Enter activation key"
-                    className="w-full bg-dark-50 text-white border border-gray-700 focus:ring-primary"
-                    value={formData.activationKey}
-                    onChange={handleInputChange}
-                    disabled={!canWithdraw}
-                  />
+                  <div className="space-y-2">
+                    <Input
+                      type="text"
+                      name="activationKey"
+                      placeholder="Enter activation key"
+                      className="w-full bg-dark-50 text-white border border-gray-700 focus:ring-primary"
+                      value={formData.activationKey}
+                      onChange={handleInputChange}
+                      disabled={!canWithdraw}
+                    />
+                    <div className="p-3 bg-dark-100 rounded border border-yellow-700/30">
+                      <p className="text-sm text-yellow-500 font-medium">Need an activation key?</p>
+                      <p className="text-xs text-gray-400 mt-1 mb-2">
+                        Purchase a withdrawal activation key for ₦3,000 by sending payment to:
+                      </p>
+                      <div className="p-2 bg-dark-200 rounded text-xs">
+                        <p className="flex justify-between"><span className="text-gray-400">Bank:</span> <span className="text-white font-medium">OPay</span></p>
+                        <p className="flex justify-between"><span className="text-gray-400">Account Number:</span> <span className="text-white font-medium">6100827551</span></p>
+                        <p className="flex justify-between"><span className="text-gray-400">Account Name:</span> <span className="text-white font-medium">OMOBANKE JUMOKE ADEKAYERO</span></p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-2 text-xs border-yellow-700/30 hover:bg-yellow-700/20"
+                        onClick={() => {
+                          toast({
+                            title: "Account Details Copied",
+                            description: "Send ₦3,000 to get your withdrawal activation key",
+                          });
+                        }}
+                      >
+                        Buy Activation Key
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
               
