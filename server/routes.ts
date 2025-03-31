@@ -4,8 +4,8 @@ import MemoryStore from "memorystore";
 import bcrypt from "bcryptjs";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { fetchMatches, fetchUpcomingMatches, checkMatchResults } from "./api";
-import { sendWithdrawalEmail, spinLuckyWheel, isSameDay, validateVIPCode, validateWithdrawalCode } from "./utils";
+import { fetchMatches, fetchUpcomingMatches, fetchLiveMatches, checkMatchResults } from "./api";
+import { sendWithdrawalEmail, sendWelcomeEmail, sendVIPActivationEmail, spinLuckyWheel, isSameDay, validateVIPCode, validateWithdrawalCode } from "./utils";
 import { z } from "zod";
 import { insertUserSchema, User } from "@shared/schema";
 
@@ -84,6 +84,12 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
       // Set session
       req.session.userId = user.id;
       
+      // Send welcome email (asynchronously, don't wait for it)
+      sendWelcomeEmail({
+        username: user.username,
+        email: user.email
+      }).catch(err => console.error('Error sending welcome email:', err));
+      
       // Return user data (without password)
       const { password, ...userData } = user;
       res.status(201).json(userData);
@@ -146,6 +152,15 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
       res.json(matches);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch matches" });
+    }
+  });
+
+  app.get("/api/live-matches", async (req, res) => {
+    try {
+      const matches = await fetchLiveMatches();
+      res.json(matches);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch live matches" });
     }
   });
 
@@ -354,15 +369,10 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
   // VIP activation routes
   app.post("/api/activate-vip", requireAuth, async (req, res) => {
     try {
-      const { activationKey } = req.body;
+      const { activationKey, hasMadePayment } = req.body;
       
       if (!activationKey) {
         return res.status(400).json({ message: "Activation key is required" });
-      }
-      
-      // Validate activation key
-      if (!validateVIPCode(activationKey)) {
-        return res.status(400).json({ message: "Invalid activation key" });
       }
       
       const userId = req.session.userId!;
@@ -377,7 +387,27 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
         return res.status(400).json({ message: "You are already a VIP member" });
       }
       
-      // Check balance for VIP fee
+      // If user claims to have made payment, send notification to admin
+      if (hasMadePayment) {
+        // Send email notification to admin
+        await sendVIPActivationEmail({
+          username: user.username,
+          email: user.email,
+          userId: user.id
+        });
+        
+        return res.json({
+          success: true,
+          message: "Your payment notification has been sent to the admin. VIP access will be granted after verification."
+        });
+      }
+      
+      // If they're using an activation key, validate it
+      if (!validateVIPCode(activationKey)) {
+        return res.status(400).json({ message: "Invalid activation key" });
+      }
+      
+      // Check balance for VIP fee (if they're not using direct payment option)
       if (user.balance < 5000) {
         return res.status(400).json({ message: "Insufficient balance. You need ₦5,000 to activate VIP" });
       }
@@ -471,13 +501,14 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
         balance: user.balance - amount - 3000
       });
       
-      // Send email to admin
+      // Send email to admin and confirmation to user
       await sendWithdrawalEmail({
         username: user.username,
         accountName,
         accountNumber,
         bankName,
-        amount
+        amount,
+        email: user.email // Include user's email for confirmation
       });
       
       // Create virtual transaction for feed

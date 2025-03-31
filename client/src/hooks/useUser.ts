@@ -81,17 +81,36 @@ export function useUser() {
     },
   });
   
+  type VipActivationPayload = string | {
+    activationKey: string;
+    hasMadePayment?: boolean;
+  };
+
   const activateVip = useMutation({
-    mutationFn: async (activationKey: string) => {
-      const res = await apiRequest('POST', '/api/activate-vip', { activationKey });
+    mutationFn: async (payload: VipActivationPayload) => {
+      // If payload is a string, treat it as the activation key
+      const requestData = typeof payload === 'string' 
+        ? { activationKey: payload } 
+        : payload;
+        
+      const res = await apiRequest('POST', '/api/activate-vip', requestData);
       return res.json();
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['/api/me'], data.user);
-      toast({
-        title: 'VIP Status Activated!',
-        description: 'You now have access to exclusive VIP benefits.',
-      });
+      // Only update user data if it's available (not available for payment notification)
+      if (data.user) {
+        queryClient.setQueryData(['/api/me'], data.user);
+        toast({
+          title: 'VIP Status Activated!',
+          description: 'You now have access to exclusive VIP benefits.',
+        });
+      } else if (data.success) {
+        // This is for the payment notification case
+        toast({
+          title: 'Payment Notification Sent',
+          description: data.message || 'Your payment notification has been sent to admin.',
+        });
+      }
     },
     onError: (error: Error) => {
       toast({

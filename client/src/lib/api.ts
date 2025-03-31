@@ -18,6 +18,12 @@ export const getCurrentUser = () =>
 export const getMatches = () => 
   apiRequest("GET", "/api/matches");
 
+export const getLiveMatches = () => 
+  apiRequest("GET", "/api/live-matches");
+
+export const getUpcomingMatches = () => 
+  apiRequest("GET", "/api/upcoming-matches");
+
 export const refreshMatches = () => 
   apiRequest("POST", "/api/matches/refresh");
 

@@ -5,6 +5,9 @@ import { Match } from '@shared/schema';
 const API_KEY = process.env.SPORTS_API_KEY || '56a8fee0f6dd264caa27f72a5beb0d233e7b6aa366a5906a8d31db1285096196';
 const BASE_URL = 'https://apiv2.allsportsapi.com/football';
 
+// Log API key being used (without revealing the full key for security)
+console.log(`Using API key: ${API_KEY.substring(0, 8)}...`);
+
 export type ApiResponse<T> = {
   success: number;
   result: T;
@@ -44,6 +47,39 @@ export async function fetchMatches(date?: string): Promise<Match[]> {
 }
 
 // Function to fetch upcoming matches for the next 3 days
+export async function fetchLiveMatches(): Promise<Match[]> {
+  try {
+    // Fetch live matches from the API
+    const response = await fetch(
+      `${BASE_URL}/?met=Livescore&APIkey=${API_KEY}`
+    );
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
+    
+    const data = await response.json() as ApiResponse<Match[]>;
+    
+    if (data.success !== 1 || !data.result) {
+      console.log('No live matches found');
+      return [];
+    }
+    
+    console.log(`Found ${data.result.length} live matches`);
+    
+    // Process matches and add betting odds
+    const matches = data.result.map(match => ({
+      ...match,
+      odds: generateOdds()
+    }));
+    
+    return matches;
+  } catch (error) {
+    console.error('Error fetching live matches:', error);
+    return [];
+  }
+}
+
 export async function fetchUpcomingMatches(): Promise<Match[]> {
   try {
     const today = new Date();
@@ -53,7 +89,10 @@ export async function fetchUpcomingMatches(): Promise<Match[]> {
     const fromDate = today.toISOString().split('T')[0];
     const toDate = threeDaysLater.toISOString().split('T')[0];
     
-    // Fetch matches from the API
+    // First try to get live matches
+    const liveMatches = await fetchLiveMatches();
+    
+    // Then fetch upcoming matches
     const response = await fetch(
       `${BASE_URL}/?met=Fixtures&APIkey=${API_KEY}&from=${fromDate}&to=${toDate}`
     );
@@ -65,16 +104,20 @@ export async function fetchUpcomingMatches(): Promise<Match[]> {
     const data = await response.json() as ApiResponse<Match[]>;
     
     if (data.success !== 1 || !data.result) {
-      return [];
+      return liveMatches; // Return just live matches if no upcoming matches
     }
     
     // Process matches and add betting odds
-    const matches = data.result.map(match => ({
+    const upcomingMatches = data.result.map(match => ({
       ...match,
       odds: generateOdds()
     }));
     
-    return matches;
+    // Combine live and upcoming matches, but avoid duplicates
+    const liveMatchIds = new Set(liveMatches.map(m => m.event_key));
+    const uniqueUpcoming = upcomingMatches.filter(m => !liveMatchIds.has(m.event_key));
+    
+    return [...liveMatches, ...uniqueUpcoming];
   } catch (error) {
     console.error('Error fetching upcoming matches:', error);
     return [];

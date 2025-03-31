@@ -4,6 +4,7 @@ import { useMatches } from '@/hooks/useMatches';
 import { MatchCard } from '@/components/MatchCard';
 import { BetSlip } from '@/components/BetSlip';
 import { LiveFeed } from '@/components/LiveFeed';
+import { LiveMatchesFeed } from '@/components/LiveMatchesFeed';
 import { Leaderboard } from '@/components/Leaderboard';
 import { LuckySpin } from '@/components/LuckySpin';
 import { VIPActivation } from '@/components/VIPActivation';
@@ -78,6 +79,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      {/* Live Matches Section */}
+      <section className="px-4 pt-6 pb-0">
+        <div className="container mx-auto">
+          <LiveMatchesFeed />
         </div>
       </section>
       

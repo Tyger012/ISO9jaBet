@@ -110,12 +110,50 @@ export type Match = {
   event_away_team: string;
   event_halftime_result: string;
   event_final_result: string;
-  event_status: string;
+  event_ft_result?: string;           // Full-time result
+  event_status: string;               // Status like "Finished", "Not Started", "In Progress"
+  event_live?: string;                // "1" for live matches, "0" for non-live
+  event_stadium?: string;             // Stadium name if available
+  event_referee?: string;             // Referee name if available
   country_name: string;
   league_name: string;
   league_key: string;
+  league_round?: string;              // Current round in the league
   home_team_logo: string;
   away_team_logo: string;
+  event_home_formation?: string;      // Team formation
+  event_away_formation?: string;      // Team formation
+  statistics?: Array<{                // Match statistics
+    type: string;
+    home: string;
+    away: string;
+  }>;
+  goalscorers?: Array<{              // Goal details
+    time: string;
+    home_scorer?: string;
+    away_scorer?: string;
+    score?: string;
+    info?: string;
+  }>;
+  cards?: Array<{                    // Card details
+    time: string;
+    home_fault?: string;
+    away_fault?: string;
+    card: string;
+  }>;
+  substitutes?: Array<any>;          // Substitution details
+  lineups?: {                        // Team lineups
+    home_team?: {
+      starting_lineups?: Array<any>;
+      substitutes?: Array<any>;
+      coaches?: Array<any>;
+    };
+    away_team?: {
+      starting_lineups?: Array<any>;
+      substitutes?: Array<any>;
+      coaches?: Array<any>;
+    };
+  };
   odds?: {
     home: string;
     draw: string;

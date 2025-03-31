@@ -3,24 +3,38 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { useMatches } from '@/hooks/useMatches';
 import { MatchCard } from '@/components/MatchCard';
 import { BetSlip } from '@/components/BetSlip';
+import { LiveMatchesFeed } from '@/components/LiveMatchesFeed';
 import { Spinner } from '@/components/ui/spinner';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 import { Match } from '@shared/schema';
-import { Search, Calendar } from 'lucide-react';
+import { Search, Calendar, Activity } from 'lucide-react';
 
 export default function Matches() {
-  const { matches, isLoadingMatches } = useMatches();
+  const { matches, liveMatches, isLoadingMatches } = useMatches();
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  const [showLiveOnly, setShowLiveOnly] = useState(false);
+  
+  const liveMatchesCount = liveMatches?.length || 0;
   
   // Get unique countries and leagues for filters
-  const countries = [...new Set(matches?.map(match => match.country_name))];
-  const leagues = [...new Set(matches?.map(match => match.league_name))];
+  const uniqueCountries = new Set<string>();
+  const uniqueLeagues = new Set<string>();
+  
+  matches?.forEach(match => {
+    if (match.country_name) uniqueCountries.add(match.country_name);
+    if (match.league_name) uniqueLeagues.add(match.league_name);
+  });
+  
+  const countries = Array.from(uniqueCountries);
+  const leagues = Array.from(uniqueLeagues);
   
   // Filter and search matches
-  const filteredMatches = matches?.filter((match: Match) => {
+  const filteredMatches = (showLiveOnly ? liveMatches : matches)?.filter((match: Match) => {
     const matchesSearch = 
       match.event_home_team.toLowerCase().includes(searchTerm.toLowerCase()) || 
       match.event_away_team.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,7 +61,42 @@ export default function Matches() {
     <MainLayout>
       <section className="px-4 py-6">
         <div className="container mx-auto">
-          <h1 className="text-2xl font-heading font-bold mb-4">All Matches</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-heading font-bold">All Matches</h1>
+            
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
+                <Switch 
+                  checked={showLiveOnly} 
+                  onCheckedChange={setShowLiveOnly}
+                  className="data-[state=checked]:bg-red-500"
+                />
+                <span className="text-sm font-medium flex items-center">
+                  <Activity className="h-4 w-4 mr-1 text-red-500" />
+                  Live Only
+                  {liveMatchesCount > 0 && (
+                    <Badge variant="destructive" className="ml-2">{liveMatchesCount}</Badge>
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Live Matches Section */}
+          {!showLiveOnly && liveMatchesCount > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-semibold flex items-center">
+                  <Activity className="h-4 w-4 mr-2 text-red-500" />
+                  Live Matches
+                  <Badge variant="destructive" className="ml-2">{liveMatchesCount}</Badge>
+                </h2>
+              </div>
+              <div className="overflow-auto pb-2">
+                <LiveMatchesFeed />
+              </div>
+            </div>
+          )}
           
           {/* Search and Filters */}
           <div className="mb-6 flex flex-col md:flex-row gap-3">

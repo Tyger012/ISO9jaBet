@@ -8,14 +8,39 @@ export function useMatches() {
   const { toast } = useToast();
   
   const { 
-    data: matches = [],
-    isLoading: isLoadingMatches,
-    isError: isMatchesError,
-    error: matchesError,
-    refetch: refetchMatches
+    data: upcomingMatches = [],
+    isLoading: isLoadingUpcomingMatches,
+    isError: isUpcomingMatchesError,
+    error: upcomingMatchesError,
+    refetch: refetchUpcomingMatches
   } = useQuery<Match[]>({
     queryKey: ['/api/upcoming-matches'],
   });
+  
+  const { 
+    data: liveMatches = [],
+    isLoading: isLoadingLiveMatches,
+    isError: isLiveMatchesError,
+    error: liveMatchesError,
+    refetch: refetchLiveMatches
+  } = useQuery<Match[]>({
+    queryKey: ['/api/live-matches'],
+    refetchInterval: 60000, // Refetch live matches every minute
+  });
+  
+  // Combine live and upcoming matches
+  const matches = [...liveMatches, ...upcomingMatches.filter(um => 
+    !liveMatches.some(lm => lm.event_key === um.event_key)
+  )];
+  
+  const isLoadingMatches = isLoadingUpcomingMatches || isLoadingLiveMatches;
+  const isMatchesError = isUpcomingMatchesError || isLiveMatchesError;
+  const matchesError = upcomingMatchesError || liveMatchesError;
+  
+  const refetchMatches = () => {
+    refetchUpcomingMatches();
+    refetchLiveMatches();
+  };
   
   const { 
     data: myBets = [],
@@ -106,18 +131,28 @@ export function useMatches() {
   
   return {
     matches,
+    liveMatches,
+    upcomingMatches,
     myBets,
     activeBets,
     matchesWithActiveBets,
     isLoadingMatches,
     isMatchesError,
     matchesError,
+    isLoadingLiveMatches,
+    isLiveMatchesError,
+    liveMatchesError,
+    isLoadingUpcomingMatches,
+    isUpcomingMatchesError,
+    upcomingMatchesError,
     isLoadingBets,
     isBetsError,
     betsError,
     placeBet,
     checkBetResults,
     refetchMatches,
+    refetchLiveMatches,
+    refetchUpcomingMatches,
     refetchBets,
     clearBets,
   };

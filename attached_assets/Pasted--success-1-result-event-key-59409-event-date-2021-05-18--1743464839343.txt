@@ -1,0 +1,175 @@
+{
+  "success": 1,
+  "result": [
+  {
+        "event_key": "59409",
+        "event_date": "2021-05-18",
+        "event_time": "20:30",
+        "event_home_team": "Lazio",
+        "home_team_key": "93",
+        "event_away_team": "Torino",
+        "away_team_key": "4973",
+        "event_halftime_result": "0 - 0",
+        "event_final_result": "0 - 0",
+        "event_ft_result": "0 - 0",
+        "event_penalty_result": "",
+        "event_status": "Finished",
+        "country_name": "Italy",
+        "league_name": "Serie A",
+        "league_key": "207",
+        "league_round": "Round 25",
+        "league_season": "2020/2021",
+        "event_live": "0",
+        "event_stadium": "Stadio Olimpico (Roma)",
+        "event_referee": "M. Fabbri",
+        "home_team_logo": "https://apiv2.allsportsapi.com/logo/93_lazio.jpg",
+        "away_team_logo": "https://apiv2.allsportsapi.com/logo/4973_torino.jpg",
+        "event_country_key": "5",
+        "league_logo": "https://apiv2.allsportsapi.com/logo/logo_leagues/207_serie-a.png",
+        "country_logo": "https://apiv2.allsportsapi.com/logo/logo_country/5_italy.png",
+        "event_home_formation": "",
+        "event_away_formation": "",
+        "fk_stage_key": "331",
+        "stage_name": "Current",
+        "league_group": "",
+        "goalscorers": [],
+        "substitutes": [
+            {
+                "time": "61",
+                "home_scorer": {
+                    "in": "M. Fares",
+                    "out": "S. Lulic"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            {
+                "time": "68",
+                "home_scorer": {
+                    "in": "Lucas Leiva",
+                    "out": "G. Escalante"
+                },
+                "score": "substitution",
+                "away_scorer": []
+            },
+            .................
+        ],
+        "cards": [
+            {
+                "time": "28",
+                "home_fault": "T. Strakosha",
+                "card": "yellow card",
+                "away_fault": ""
+            },
+            ..................
+        ],
+        "lineups": {
+            "home_team": {
+                "starting_lineups": [
+                    {
+                        "player": "Thomas Strakosha",
+                        "player_number": "1",
+                        "player_position": "1",
+                        "player_country": null,
+                        "player_key": "979073766"
+                    },
+                    {
+                        "player": "Adam Marusic",
+                        "player_number": "77",
+                        "player_position": "2",
+                        "player_country": null,
+                        "player_key": "988865105"
+                    },
+                    ..........................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Pepe Reina",
+                        "player_number": "25",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "926105079"
+                    },
+                    {
+                        "player": "Marco Alia",
+                        "player_number": "71",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "3598033023"
+                    },
+                    ......................
+                ],
+                "coaches": [
+                    {
+                        "coache": "S. Inzaghi",
+                        "coache_country": null
+                    }
+                ],
+                "missing_players": []
+            },
+            "away_team": {
+                "starting_lineups": [
+                    {
+                        "player": "Salvatore Sirigu",
+                        "player_number": "39",
+                        "player_position": "1",
+                        "player_country": null,
+                        "player_key": "72635334"
+                    },
+                    {
+                        "player": "Armando Izzo",
+                        "player_number": "5",
+                        "player_position": "2",
+                        "player_country": null,
+                        "player_key": "3292395742"
+                    },
+                    ............................
+                ],
+                "substitutes": [
+                    {
+                        "player": "Vanja Milinkovic-Savic",
+                        "player_number": "32",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "3036656066"
+                    },
+                    {
+                        "player": "Samir Ujkani",
+                        "player_number": "18",
+                        "player_position": "0",
+                        "player_country": null,
+                        "player_key": "1358621159"
+                    },
+                    ..................................
+                ],
+                "coaches": [
+                    {
+                        "coache": "D. Nicola",
+                        "coache_country": null
+                    }
+                ],
+                "missing_players": []
+            }
+        },
+        "statistics": [
+            {
+                "type": "Shots Total",
+                "home": "24",
+                "away": "6"
+            },
+            {
+                "type": "Shots On Goal",
+                "home": "7",
+                "away": "3"
+            },
+            {
+                "type": "Shots Off Goal",
+                "home": "12",
+                "away": "3"
+            },
+            ...................
+        ]
+    }
+.......
+  ]
+}

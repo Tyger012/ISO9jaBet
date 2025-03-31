@@ -10,6 +10,7 @@ export function VIPActivation() {
   const { user, activateVip } = useUser();
   const { toast } = useToast();
   const [activationKey, setActivationKey] = useState('');
+  const [paymentSubmitted, setPaymentSubmitted] = useState(false);
   
   const isVip = user?.isVip || false;
   
@@ -25,6 +26,20 @@ export function VIPActivation() {
     
     try {
       await activateVip.mutateAsync(activationKey);
+    } catch (error) {
+      // Error is handled in the mutation
+    }
+  };
+  
+  const handlePaymentSubmission = async () => {
+    try {
+      await activateVip.mutateAsync({ activationKey: "PAYMENT", hasMadePayment: true });
+      setPaymentSubmitted(true);
+      toast({
+        title: 'Payment Notification Sent',
+        description: 'Your payment notification has been sent. The admin will verify and activate your VIP status.',
+        variant: 'default',
+      });
     } catch (error) {
       // Error is handled in the mutation
     }
@@ -128,8 +143,28 @@ export function VIPActivation() {
                   <p className="flex justify-between"><span className="text-gray-400">Account Number:</span> <span className="text-white font-medium">6100827551</span></p>
                   <p className="flex justify-between"><span className="text-gray-400">Account Name:</span> <span className="text-white font-medium">OMOBANKE JUMOKE ADEKAYERO</span></p>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">After payment, contact support to receive your activation key</p>
+                <p className="text-xs text-gray-400 mt-2">After payment, click the button below or enter your activation key</p>
               </div>
+              
+              {paymentSubmitted ? (
+                <div className="mt-4 p-3 bg-green-900/20 border border-green-500/50 rounded-lg">
+                  <p className="text-sm text-green-500 flex items-center">
+                    <span className="flex items-center justify-center bg-green-500/20 rounded-full w-5 h-5 mr-2">✓</span>
+                    Payment notification submitted
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Your VIP status will be activated soon after payment verification.
+                  </p>
+                </div>
+              ) : (
+                <Button
+                  className="w-full mt-3 mb-4 bg-green-600 hover:bg-green-700 text-white font-medium"
+                  onClick={handlePaymentSubmission}
+                  disabled={activateVip.isPending}
+                >
+                  {activateVip.isPending ? 'Processing...' : 'I\'ve Made the Payment'}
+                </Button>
+              )}
               
               <div className="flex flex-col sm:flex-row gap-3">
                 <Input

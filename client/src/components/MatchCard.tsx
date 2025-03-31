@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useBetting } from '@/context/BettingContext';
 import { useAuth } from '@/context/AuthContext';
+import { Badge } from '@/components/ui/badge';
+import { Clock, Activity } from 'lucide-react';
 
 interface MatchCardProps {
   match: Match;
@@ -24,6 +26,10 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
     league_name: league,
     home_team_logo: homeLogo,
     away_team_logo: awayLogo,
+    event_status: status,
+    event_live: isLive,
+    event_halftime_result: halftimeResult,
+    event_final_result: finalResult,
     odds
   } = match;
   
@@ -77,13 +83,24 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
             <span className="text-xs px-2 py-0.5 bg-dark-200 text-gray-400 rounded">{league}</span>
             <span className="text-xs text-gray-400">{country}</span>
           </div>
-          <div className="flex items-center">
-            <span className="text-xs text-orange-500 font-semibold">
-              <i className="fas fa-clock mr-1 text-xs"></i>
-              <span className="countdown">
-                {countdown.formatted}
+          <div className="flex items-center space-x-1">
+            {isLive === "1" ? (
+              <Badge variant="destructive" className="px-2 py-0.5 flex items-center space-x-1">
+                <Activity className="w-3 h-3 animate-pulse" />
+                <span className="text-xs">LIVE</span>
+              </Badge>
+            ) : status === "Finished" ? (
+              <Badge variant="outline" className="px-2 py-0.5 bg-gray-800">
+                <span className="text-xs text-gray-400">Finished</span>
+              </Badge>
+            ) : (
+              <span className="text-xs text-orange-500 font-semibold flex items-center">
+                <Clock className="w-3 h-3 mr-1" />
+                <span className="countdown">
+                  {countdown.formatted}
+                </span>
               </span>
-            </span>
+            )}
           </div>
         </div>
         
@@ -106,7 +123,20 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
           
           {/* Score/VS */}
           <div className="flex flex-col items-center justify-center w-1/5">
-            <span className="text-lg font-bold">VS</span>
+            {isLive === "1" || status === "Finished" ? (
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold text-primary">
+                  {finalResult || halftimeResult || "0 - 0"}
+                </span>
+                {status === "Finished" ? (
+                  <span className="text-xs text-gray-400 mt-1">FT</span>
+                ) : (
+                  <span className="text-xs text-red-500 mt-1 animate-pulse">Live</span>
+                )}
+              </div>
+            ) : (
+              <span className="text-lg font-bold">VS</span>
+            )}
           </div>
           
           {/* Away Team */}
@@ -196,10 +226,27 @@ export function MatchCard({ match, isActive = false, className }: MatchCardProps
           </div>
         )}
         
-        {isStarted && (
+        {isStarted && !isLive && status !== "Finished" && (
           <div className="mt-2 text-center">
             <span className="text-xs text-yellow-500">
               This match has already started
+            </span>
+          </div>
+        )}
+        
+        {isLive === "1" && (
+          <div className="mt-2 text-center">
+            <span className="text-xs text-red-400 flex items-center justify-center">
+              <Activity className="w-3 h-3 mr-1 animate-pulse" />
+              Match in progress: {status}
+            </span>
+          </div>
+        )}
+        
+        {status === "Finished" && (
+          <div className="mt-2 text-center">
+            <span className="text-xs text-gray-400">
+              Match completed with result: {finalResult}
             </span>
           </div>
         )}
