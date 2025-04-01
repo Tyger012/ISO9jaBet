@@ -20,8 +20,7 @@ export function useUser() {
   
   const login = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      const res = await apiRequest('POST', '/api/login', credentials);
-      return res.json();
+      return await apiRequest<User>('POST', '/api/login', credentials);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['/api/me'], data);
@@ -41,8 +40,7 @@ export function useUser() {
   
   const register = useMutation({
     mutationFn: async (userData: { username: string; email: string; password: string }) => {
-      const res = await apiRequest('POST', '/api/register', userData);
-      return res.json();
+      return await apiRequest<User>('POST', '/api/register', userData);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['/api/me'], data);
@@ -62,8 +60,7 @@ export function useUser() {
   
   const logout = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/logout', {});
-      return res.json();
+      return await apiRequest<{message: string}>('POST', '/api/logout', {});
     },
     onSuccess: () => {
       queryClient.removeQueries();
@@ -71,6 +68,8 @@ export function useUser() {
         title: 'Logged out',
         description: 'You have been successfully logged out.',
       });
+      // Force redirect to login page
+      window.location.href = '/login';
     },
     onError: () => {
       toast({
@@ -93,8 +92,7 @@ export function useUser() {
         ? { activationKey: payload } 
         : payload;
         
-      const res = await apiRequest('POST', '/api/activate-vip', requestData);
-      return res.json();
+      return await apiRequest<{user?: User, success?: boolean, message?: string}>('POST', '/api/activate-vip', requestData);
     },
     onSuccess: (data) => {
       // Only update user data if it's available (not available for payment notification)
@@ -123,8 +121,7 @@ export function useUser() {
   
   const spinLuckyWheel = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/lucky-spin', {});
-      return res.json();
+      return await apiRequest<{user: User, spinResult: {amount: number}}>('POST', '/api/lucky-spin', {});
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['/api/me'], data.user);
@@ -152,8 +149,7 @@ export function useUser() {
       amount: number;
       activationKey: string;
     }) => {
-      const res = await apiRequest('POST', '/api/request-withdrawal', withdrawalData);
-      return res.json();
+      return await apiRequest<{user: User}>('POST', '/api/request-withdrawal', withdrawalData);
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['/api/me'], data.user);

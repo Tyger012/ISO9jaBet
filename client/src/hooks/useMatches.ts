@@ -54,8 +54,7 @@ export function useMatches() {
   
   const placeBet = useMutation({
     mutationFn: async (betData: { matchId: string; prediction: string; odds: string }) => {
-      const res = await apiRequest('POST', '/api/place-bet', betData);
-      return res.json();
+      return await apiRequest<Bet>('POST', '/api/place-bet', betData);
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/my-bets'] });
@@ -73,18 +72,22 @@ export function useMatches() {
     },
   });
   
+  type BetResultsResponse = {
+    user: any;
+    results?: Array<{status: string}>;
+  };
+  
   const checkBetResults = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/check-bet-results', {});
-      return res.json();
+      return await apiRequest<BetResultsResponse>('POST', '/api/check-bet-results', {});
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/my-bets'] });
       queryClient.invalidateQueries({ queryKey: ['/api/me'] });
       
       if (data.results && data.results.length > 0) {
-        const wins = data.results.filter((result: any) => result.status === 'won').length;
-        const losses = data.results.filter((result: any) => result.status === 'lost').length;
+        const wins = data.results.filter((result) => result.status === 'won').length;
+        const losses = data.results.filter((result) => result.status === 'lost').length;
         
         if (wins > 0 || losses > 0) {
           toast({
