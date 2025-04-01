@@ -24,6 +24,9 @@ export const getLiveMatches = () =>
 export const getUpcomingMatches = () => 
   apiRequest("GET", "/api/upcoming-matches");
 
+export const getMatchById = (matchId: string) => 
+  apiRequest("GET", `/api/match/${matchId}`);
+
 export const refreshMatches = () => 
   apiRequest("POST", "/api/matches/refresh");
 

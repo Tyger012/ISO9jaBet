@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MainLayout } from '@/layouts/MainLayout';
 import { useMatches } from '@/hooks/useMatches';
 import { Card, CardContent } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { useQuery } from '@tanstack/react-query';
-import { Bet, Transaction } from '@shared/schema';
+import { Bet, Transaction, Match } from '@shared/schema';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Trophy, XCircle, CheckCircle2, Calendar, Clock } from 'lucide-react';
+import { Trophy, XCircle, CheckCircle2, Calendar, Clock, ArrowLeft, ArrowRight } from 'lucide-react';
+import { apiRequest } from '@/lib/queryClient';
+import { getMatchById } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
 
 export default function History() {
-  const { myBets, isLoadingBets } = useMatches();
+  const { myBets, isLoadingBets, matches, liveMatches, upcomingMatches } = useMatches();
+  const [matchesById, setMatchesById] = useState<{[key: string]: Match}>({});
+  const { toast } = useToast();
   
   // Get user transactions
   const { 
@@ -19,6 +24,43 @@ export default function History() {
   } = useQuery<Transaction[]>({
     queryKey: ['/api/my-transactions'],
   });
+  
+  // Fetch match data from API by match ID
+  const fetchMatchById = async (matchId: string): Promise<Match | null> => {
+    try {
+      const match = await apiRequest<Match>("GET", `/api/match/${matchId}`);
+      return match;
+    } catch (error) {
+      console.error("Error fetching match:", error);
+      return null;
+    }
+  };
+  
+  // Map all available matches for lookup
+  useEffect(() => {
+    const allMatches = [...matches, ...liveMatches, ...upcomingMatches];
+    const matchMap: {[key: string]: Match} = {};
+    
+    allMatches.forEach(match => {
+      matchMap[match.event_key.toString()] = match;
+    });
+    
+    setMatchesById(matchMap);
+    
+    // For any bets without match data, try to fetch them
+    myBets.forEach(bet => {
+      if (!matchMap[bet.matchId]) {
+        fetchMatchById(bet.matchId).then(match => {
+          if (match) {
+            setMatchesById(prev => ({
+              ...prev,
+              [bet.matchId]: match
+            }));
+          }
+        });
+      }
+    });
+  }, [matches, liveMatches, upcomingMatches, myBets]);
   
   // Format date
   const formatDate = (dateString: string | Date) => {
@@ -64,10 +106,52 @@ export default function History() {
                     myBets.map((bet: Bet) => (
                       <Card key={bet.id} className="bg-dark-50 border-gray-700 overflow-hidden">
                         <CardContent className="p-0">
+                          {/* Match details header */}
+                          {matchesById[bet.matchId] && (
+                            <div className="bg-dark-100 border-b border-gray-700 p-3">
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center space-x-2">
+                                  <img 
+                                    src={matchesById[bet.matchId].home_team_logo} 
+                                    alt={matchesById[bet.matchId].event_home_team}
+                                    className="w-6 h-6 object-contain"
+                                  />
+                                  <span className="font-medium text-sm">{matchesById[bet.matchId].event_home_team}</span>
+                                </div>
+                                
+                                {/* Score display */}
+                                <div className="flex items-center space-x-2">
+                                  <div className={`text-center rounded px-3 py-1 ${
+                                    matchesById[bet.matchId].event_status === "Finished" 
+                                      ? "bg-dark-300 text-white" 
+                                      : "bg-dark-200 text-gray-400"
+                                  }`}>
+                                    {matchesById[bet.matchId].event_final_result || 
+                                     matchesById[bet.matchId].event_halftime_result || 
+                                     'vs'}
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-medium text-sm">{matchesById[bet.matchId].event_away_team}</span>
+                                  <img 
+                                    src={matchesById[bet.matchId].away_team_logo} 
+                                    alt={matchesById[bet.matchId].event_away_team}
+                                    className="w-6 h-6 object-contain"
+                                  />
+                                </div>
+                              </div>
+                              <div className="text-xs text-gray-400 mt-2 flex justify-between">
+                                <span>{matchesById[bet.matchId].league_name}</span>
+                                <span>{matchesById[bet.matchId].event_status}</span>
+                              </div>
+                            </div>
+                          )}
+                        
                           <div className="p-4 flex justify-between items-start">
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-medium">Match ID: {bet.matchId}</span>
+                                {!matchesById[bet.matchId] && <span className="font-medium">Match ID: {bet.matchId}</span>}
                                 {bet.status === 'won' && (
                                   <span className="flex items-center text-green-500 text-sm">
                                     <Trophy className="h-4 w-4 mr-1" />
@@ -89,8 +173,8 @@ export default function History() {
                               </div>
                               <div className="text-sm text-gray-400 mt-1">
                                 Prediction: <span className="font-medium">
-                                  {bet.prediction === 'home' ? 'Home Win' : 
-                                   bet.prediction === 'away' ? 'Away Win' : 'Draw'}
+                                  {bet.prediction === 'home' ? (matchesById[bet.matchId] ? matchesById[bet.matchId].event_home_team + ' Win' : 'Home Win') : 
+                                   bet.prediction === 'away' ? (matchesById[bet.matchId] ? matchesById[bet.matchId].event_away_team + ' Win' : 'Away Win') : 'Draw'}
                                 </span>
                               </div>
                               <div className="text-sm text-gray-400">

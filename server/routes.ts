@@ -4,7 +4,7 @@ import MemoryStore from "memorystore";
 import bcrypt from "bcryptjs";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { fetchMatches, fetchUpcomingMatches, fetchLiveMatches, checkMatchResults } from "./api";
+import { fetchMatches, fetchUpcomingMatches, fetchLiveMatches, checkMatchResults, getMatchById } from "./api";
 import { sendWithdrawalEmail, sendWelcomeEmail, sendVIPActivationEmail, spinLuckyWheel, isSameDay, validateVIPCode, validateWithdrawalCode } from "./utils";
 import { z } from "zod";
 import { insertUserSchema, User } from "@shared/schema";
@@ -170,6 +170,21 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
       res.json(matches);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch upcoming matches" });
+    }
+  });
+  
+  app.get("/api/match/:matchId", async (req, res) => {
+    try {
+      const matchId = req.params.matchId;
+      const match = await getMatchById(matchId);
+      
+      if (!match) {
+        return res.status(404).json({ message: "Match not found" });
+      }
+      
+      res.json(match);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch match details" });
     }
   });
 
