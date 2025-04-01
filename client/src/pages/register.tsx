@@ -4,12 +4,13 @@ import { useLocation } from 'wouter';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Registration form schema
 const registerSchema = z.object({
@@ -27,6 +28,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 export default function Register() {
   const { register, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
+  const [registerError, setRegisterError] = React.useState<string | null>(null);
   
   // Redirect if already authenticated
   React.useEffect(() => {
@@ -48,9 +50,22 @@ export default function Register() {
   
   // Handle form submission
   const onSubmit = (data: RegisterFormData) => {
+    setRegisterError(null); // Clear previous errors
     // Remove confirmPassword as it's not needed in the API call
     const { confirmPassword, ...registerData } = data;
-    register.mutate(registerData);
+    register.mutate(registerData, {
+      onError: (error: Error) => {
+        setRegisterError(error.message);
+      }
+    });
+  };
+  
+  // Function to get a user-friendly error message
+  const getErrorMessage = (error: string): string => {
+    if (error.includes('already exists')) {
+      return 'This username or email is already registered. Please try another or sign in.';
+    }
+    return error;
   };
   
   return (
@@ -66,6 +81,15 @@ export default function Register() {
           <CardDescription>Sign up to start predicting and winning</CardDescription>
         </CardHeader>
         <CardContent>
+          {registerError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {getErrorMessage(registerError)}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -155,22 +179,21 @@ export default function Register() {
                 )}
                 Create Account
               </Button>
-              
-              <div className="text-center mt-4">
-                <p className="text-sm text-gray-400">
-                  Already have an account? 
-                  <Button 
-                    variant="link" 
-                    className="text-primary p-0 ml-1"
-                    onClick={() => navigate('/login')}
-                  >
-                    Sign In
-                  </Button>
-                </p>
-              </div>
             </form>
           </Form>
         </CardContent>
+        <CardFooter className="flex justify-center pt-0">
+          <p className="text-sm text-gray-400">
+            Already have an account? 
+            <Button 
+              variant="link" 
+              className="text-primary p-0 ml-1"
+              onClick={() => navigate('/login')}
+            >
+              Sign In
+            </Button>
+          </p>
+        </CardFooter>
       </Card>
       
       <div className="mt-6 text-center text-xs text-gray-500 max-w-md">

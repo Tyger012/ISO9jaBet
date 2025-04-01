@@ -4,12 +4,13 @@ import { useLocation } from 'wouter';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { LogIn } from 'lucide-react';
+import { LogIn, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Login form schema
 const loginSchema = z.object({
@@ -22,6 +23,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
+  const [loginError, setLoginError] = React.useState<string | null>(null);
   
   // Redirect if already authenticated
   React.useEffect(() => {
@@ -41,7 +43,12 @@ export default function Login() {
   
   // Handle form submission
   const onSubmit = (data: LoginFormData) => {
-    login.mutate(data);
+    setLoginError(null); // Clear previous errors
+    login.mutate(data, {
+      onError: (error: Error) => {
+        setLoginError(error.message);
+      }
+    });
   };
   
   return (
@@ -57,6 +64,17 @@ export default function Login() {
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
+          {loginError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {loginError === 'Invalid credentials' 
+                  ? 'The username or password you entered is incorrect.' 
+                  : loginError}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -108,22 +126,21 @@ export default function Login() {
                 )}
                 Sign In
               </Button>
-              
-              <div className="text-center mt-4">
-                <p className="text-sm text-gray-400">
-                  Don't have an account? 
-                  <Button 
-                    variant="link" 
-                    className="text-primary p-0 ml-1"
-                    onClick={() => navigate('/register')}
-                  >
-                    Register
-                  </Button>
-                </p>
-              </div>
             </form>
           </Form>
         </CardContent>
+        <CardFooter className="flex justify-center pt-0">
+          <p className="text-sm text-gray-400">
+            Don't have an account? 
+            <Button 
+              variant="link" 
+              className="text-primary p-0 ml-1"
+              onClick={() => navigate('/register')}
+            >
+              Register
+            </Button>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );
