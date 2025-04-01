@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { LogOut, Settings, User } from 'lucide-react';
 import { Link } from 'wouter';
+import { PWAInstallPrompt } from './PWAInstallPrompt';
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -24,11 +25,18 @@ export function Header() {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/">
           <a className="flex items-center space-x-2">
-            <span className="text-accent font-heading font-bold text-2xl">ISO9ja<span className="text-primary">Bet</span></span>
+            <img
+              src="/header-logo.svg"
+              alt="ISO9jaBet"
+              className="h-8 mr-2"
+            />
           </a>
         </Link>
         
         <div className="flex items-center space-x-3">
+          {/* PWA Install Prompt */}
+          <PWAInstallPrompt />
+          
           {/* Balance Display */}
           <div className="flex flex-col items-end">
             <span className="text-xs text-gray-400">Balance</span>
