@@ -80,23 +80,30 @@ export function PWAInstallPrompt() {
   
   if (isIOS) {
     return (
-      <Alert className="mt-2 bg-dark-100 border-primary">
-        <AlertDescription className="text-sm">
-          To install ISO9jaBet: tap <span className="inline-block"><Download className="h-3 w-3 inline" /></span> then "Add to Home Screen"
+      <Alert className="mt-2 bg-dark-100 border-primary shadow-lg">
+        <AlertDescription className="text-sm font-medium text-white">
+          To install ISO9jaBet: tap <span className="inline-block"><Download className="h-4 w-4 inline text-primary" /></span> then "Add to Home Screen"
         </AlertDescription>
       </Alert>
     );
   }
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      className="gap-2 bg-dark-100 border-primary hover:bg-primary/20"
-      onClick={handleInstallClick}
-    >
-      <Download className="h-4 w-4" />
-      <span>Install App</span>
-    </Button>
+    <div className="flex flex-col gap-2">
+      <Button
+        variant="outline"
+        size="sm"
+        className="gap-2 bg-dark-100 border-primary hover:bg-primary/20"
+        onClick={handleInstallClick}
+      >
+        <Download className="h-4 w-4" />
+        <span>Install App</span>
+      </Button>
+      <Alert className="bg-dark-100 border-primary shadow-lg">
+        <AlertDescription className="text-xs text-white">
+          To install ISO9jaBet: tap <span className="inline-block"><Download className="h-3 w-3 inline text-primary" /></span> then "Add to Home Screen"
+        </AlertDescription>
+      </Alert>
+    </div>
   );
 }

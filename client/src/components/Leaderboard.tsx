@@ -32,7 +32,7 @@ export function Leaderboard() {
   // Get medal color based on position
   const getMedalColor = (position: number) => {
     switch (position) {
-      case 0: return 'bg-accent';
+      case 0: return 'bg-green-600';
       case 1: return 'bg-gray-400';
       case 2: return 'bg-amber-700';
       default: return 'bg-dark-50 text-gray-300';

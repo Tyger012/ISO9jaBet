@@ -35,7 +35,9 @@ export function Header() {
         
         <div className="flex items-center space-x-3">
           {/* PWA Install Prompt */}
-          <PWAInstallPrompt />
+          <div className="hidden md:block">
+            <PWAInstallPrompt />
+          </div>
           
           {/* Balance Display */}
           <div className="flex flex-col items-end">

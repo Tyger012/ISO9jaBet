@@ -11,8 +11,9 @@ import { VIPActivation } from '@/components/VIPActivation';
 import { WithdrawalForm } from '@/components/WithdrawalForm';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/context/AuthContext';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
 export default function Home() {
   const { matches, isLoadingMatches, refetchMatches, checkBetResults } = useMatches();
@@ -69,6 +70,13 @@ export default function Home() {
                   My History
                 </Button>
               </div>
+              
+              {/* PWA Install Alert - Only visible on small screens */}
+              <Alert className="mt-4 md:hidden bg-primary/20 border border-primary shadow-lg">
+                <AlertDescription className="text-sm font-medium text-white">
+                  To install ISO9jaBet: tap <span className="inline-block"><Download className="h-4 w-4 inline text-primary" /></span> then "Add to Home Screen"
+                </AlertDescription>
+              </Alert>
             </div>
             
             {/* Lucky Spin Preview */}
