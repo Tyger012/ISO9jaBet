@@ -46,7 +46,11 @@ export function LuckySpin() {
       const result = await spinLuckyWheel.mutateAsync();
       
       // The result is stored but won't be shown until animation completes
-      setSpinResult(result);
+      // Using setTimeout to simulate a 5-second spinning animation
+      setTimeout(() => {
+        setSpinResult(result && result.amount ? result.amount : result);
+        handleSpinComplete();
+      }, 5000);
       
       // We don't stop spinning here - the animation will continue
       // Actual dialog showing is handled in handleSpinComplete
@@ -57,11 +61,8 @@ export function LuckySpin() {
   
   const handleSpinComplete = () => {
     setIsSpinning(false);
-    
-    if (spinResult !== null) {
-      // Show trophy dialog after animation completes
-      setShowResultDialog(true);
-    }
+    // Show trophy dialog after animation completes
+    setShowResultDialog(true);
   };
   
   return (
@@ -150,7 +151,7 @@ export function LuckySpin() {
                   {/* Amount badge */}
                   <div className="absolute -bottom-1 flex items-center justify-center w-full">
                     <div className="bg-yellow-600 text-white font-bold rounded-full px-3 py-1 text-sm shadow-lg border border-yellow-400">
-                      ₦{spinResult?.toLocaleString()}
+                      ₦{typeof spinResult === 'number' ? spinResult.toLocaleString() : '0'}
                     </div>
                   </div>
                 </div>
@@ -174,7 +175,7 @@ export function LuckySpin() {
             
             <div className="text-center space-y-3 bg-dark-300/50 p-5 rounded-xl backdrop-blur-sm w-full">
               <h3 className="text-2xl font-bold text-yellow-400">You Won</h3>
-              <p className="text-4xl font-bold text-white">₦{spinResult?.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-white">₦{typeof spinResult === 'number' ? spinResult.toLocaleString() : '0'}</p>
               <p className="text-gray-300 text-sm mt-2">
                 The amount has been added to your account balance
               </p>

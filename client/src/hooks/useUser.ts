@@ -130,7 +130,7 @@ export function useUser() {
       queryClient.setQueryData(['/api/me'], data.user);
       toast({
         title: 'Lucky Spin Result!',
-        description: `Congratulations! You've won ₦${data.spinResult.amount}`,
+        description: `Congratulations! You've won ₦${data.spinResult.amount.toLocaleString()}`,
       });
       return data.spinResult.amount;
     },
