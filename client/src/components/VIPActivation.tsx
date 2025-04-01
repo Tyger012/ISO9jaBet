@@ -134,7 +134,7 @@ export function VIPActivation() {
             
             <div className="mt-6 bg-dark-100 p-4 rounded-lg border border-gray-700">
               <h3 className="font-medium text-white">Activate VIP Status</h3>
-              <p className="text-sm text-gray-400 mt-1">Send ₦5,000 to purchase your VIP activation key</p>
+              <p className="text-sm text-gray-400 mt-1">Send ₦3,000 to purchase your VIP activation key</p>
               
               <div className="mt-3 p-3 bg-dark-200 rounded border border-gray-600 mb-4">
                 <h4 className="text-sm font-medium text-accent mb-2">Payment Account Details</h4>

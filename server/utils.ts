@@ -94,7 +94,7 @@ export async function sendVIPActivationEmail(userData: {
           <li><strong>Account Number:</strong> 6100827551</li>
           <li><strong>Bank:</strong> OPay</li>
           <li><strong>Account Name:</strong> OMOBANKE JUMOKE ADEKAYERO</li>
-          <li><strong>Amount:</strong> ₦5,000</li>
+          <li><strong>Amount:</strong> ₦3,000</li>
         </ul>
         <p>Regards,<br>ISO9jaBet System</p>
       `,

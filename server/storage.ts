@@ -119,7 +119,7 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id, 
-      balance: 5000, 
+      balance: 1000, 
       isVip: false, 
       lastSpinDate: null,
       createdAt: now
