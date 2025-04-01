@@ -44,11 +44,23 @@ export function LuckySpin() {
     try {
       // First start the spinning animation
       const result = await spinLuckyWheel.mutateAsync();
+      console.log('Spin result from API:', result);
+      
+      // Get the correct amount value
+      let winAmount = 0;
+      if (result && typeof result.spinResult === 'object' && result.spinResult.amount) {
+        winAmount = result.spinResult.amount;
+      } else if (result && typeof result === 'number') {
+        winAmount = result;
+      }
+      
+      console.log('Win amount extracted:', winAmount);
       
       // The result is stored but won't be shown until animation completes
       // Using setTimeout to simulate a 5-second spinning animation
       setTimeout(() => {
-        setSpinResult(result && result.amount ? result.amount : result);
+        setSpinResult(winAmount);
+        console.log('Setting spin result to:', winAmount);
         handleSpinComplete();
       }, 5000);
       
