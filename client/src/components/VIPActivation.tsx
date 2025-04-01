@@ -182,7 +182,7 @@ export function VIPActivation() {
                   {activateVip.isPending ? 'Activating...' : 'Activate VIP'}
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">VIP Activation Key: Use code "ISO9" after payment confirmation</p>
+
             </div>
           </CardContent>
         </Card>
