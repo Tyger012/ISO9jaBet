@@ -138,15 +138,35 @@ export class MemStorage implements IStorage {
   }
 
   async getLeaderboard(limit: number = 10): Promise<LeaderboardUser[]> {
-    return Array.from(this.users.values())
-      .sort((a, b) => b.balance - a.balance)
-      .slice(0, limit)
+    // Create top players with high balances
+    const topPlayers: LeaderboardUser[] = [
+      { id: 1001, username: "FootballKing", balance: 7000000, isVip: true },
+      { id: 1002, username: "BetMaster365", balance: 5600000, isVip: true },
+      { id: 1003, username: "GoalScorer", balance: 3800000, isVip: true },
+      { id: 1004, username: "PremierPro", balance: 2500000, isVip: true },
+      { id: 1005, username: "EliteVIPBet", balance: 1900000, isVip: true },
+      { id: 1006, username: "TopGunner", balance: 1250000, isVip: true },
+      { id: 1007, username: "FootieLegend", balance: 980000, isVip: true },
+      { id: 1008, username: "SoccerKing", balance: 750000, isVip: true },
+      { id: 1009, username: "BetWizard", balance: 520000, isVip: true },
+      { id: 1010, username: "GoalMachine", balance: 350000, isVip: true }
+    ];
+    
+    // Get real users from the database
+    const realUsers = Array.from(this.users.values())
       .map(user => ({
         id: user.id,
         username: user.username,
         balance: user.balance,
         isVip: user.isVip
       }));
+    
+    // Combine both lists and sort by balance
+    const allUsers = [...topPlayers, ...realUsers]
+      .sort((a, b) => b.balance - a.balance)
+      .slice(0, limit);
+    
+    return allUsers;
   }
 
   // Bet operations
