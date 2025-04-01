@@ -21,9 +21,9 @@ export function LuckyWheel({
   ...props
 }: LuckyWheelProps) {
   const sizeClasses = {
-    sm: "w-48 h-48",
-    md: "w-64 h-64",
-    lg: "w-80 h-80",
+    sm: "w-40 h-40",
+    md: "w-56 h-56",
+    lg: "w-72 h-72",
   };
 
   // Calculate rotation based on result

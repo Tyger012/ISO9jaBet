@@ -55,7 +55,7 @@ export function Leaderboard() {
                     <span className="ml-2 px-1.5 py-0.5 bg-accent/20 text-accent text-xs rounded">VIP</span>
                   )}
                 </div>
-                <span className="font-heading font-bold text-accent">₦{user.balance.toLocaleString()}</span>
+                <span className={`font-heading font-bold ${index === 0 ? 'text-green-500' : 'text-accent'}`}>₦{user.balance.toLocaleString()}</span>
               </div>
             </div>
           ))}

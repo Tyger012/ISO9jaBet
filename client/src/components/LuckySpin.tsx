@@ -57,7 +57,7 @@ export function LuckySpin() {
       console.log('Win amount extracted:', winAmount);
       
       // The result is stored but won't be shown until animation completes
-      // Using setTimeout to simulate a 5-second spinning animation
+      // Using setTimeout to match the 5-second wheel animation exactly
       setTimeout(() => {
         setSpinResult(winAmount);
         console.log('Setting spin result to:', winAmount);
@@ -159,7 +159,7 @@ export function LuckySpin() {
             <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center z-10">
                 <div className="relative flex items-center justify-center">
-                  <Trophy className="w-20 h-20 text-yellow-500" />
+                  <Trophy className="w-16 h-16 text-yellow-500" />
                   {/* Amount badge */}
                   <div className="absolute -bottom-1 flex items-center justify-center w-full">
                     <div className="bg-yellow-600 text-white font-bold rounded-full px-3 py-1 text-sm shadow-lg border border-yellow-400">
@@ -168,7 +168,7 @@ export function LuckySpin() {
                   </div>
                 </div>
               </div>
-              <div className="w-36 h-36 rounded-full bg-gradient-to-r from-yellow-600/20 via-yellow-500/20 to-yellow-600/20 flex items-center justify-center animate-pulse" />
+              <div className="w-32 h-32 rounded-full bg-gradient-to-r from-yellow-600/20 via-yellow-500/20 to-yellow-600/20 flex items-center justify-center animate-pulse" />
               {/* Light rays animation */}
               <div className="absolute inset-0 z-0">
                 <div className="w-full h-full absolute opacity-30">
