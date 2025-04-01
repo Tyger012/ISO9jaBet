@@ -9,6 +9,7 @@ interface LuckyWheelProps extends React.HTMLAttributes<HTMLDivElement> {
   result?: number;
 }
 
+// Ensure spin animation lasts exactly 5 seconds
 const SPIN_DURATION = 5; // in seconds
 
 export function LuckyWheel({
@@ -45,8 +46,9 @@ export function LuckyWheel({
     const baseRotation = segmentMap[result] || 0;
     const randomOffset = Math.random() * 40 - 20; // random offset between -20 and 20 degrees
     
-    // Add multiple rotations for effect (5 full rotations plus the target position)
-    return 1800 + baseRotation + randomOffset;
+    // Add multiple rotations for effect (8 full rotations plus the target position)
+    // This makes the wheel spin more realistically over the 5 seconds
+    return 2880 + baseRotation + randomOffset; // 2880 = 8 * 360
   };
 
   return (
@@ -61,7 +63,8 @@ export function LuckyWheel({
         }}
         transition={{
           duration: SPIN_DURATION,
-          ease: "easeOut",
+          ease: [0.32, 0.72, 0.15, 0.95], // Custom cubic bezier curve for a more realistic spin-down effect
+          type: "tween"
         }}
         onAnimationComplete={() => {
           if (isSpinning && onSpinComplete) {

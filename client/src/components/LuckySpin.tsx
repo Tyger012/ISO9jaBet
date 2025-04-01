@@ -42,8 +42,14 @@ export function LuckySpin() {
     setShowResultDialog(false);
     
     try {
+      // First start the spinning animation
       const result = await spinLuckyWheel.mutateAsync();
+      
+      // The result is stored but won't be shown until animation completes
       setSpinResult(result);
+      
+      // We don't stop spinning here - the animation will continue
+      // Actual dialog showing is handled in handleSpinComplete
     } catch (error) {
       setIsSpinning(false);
     }
@@ -52,8 +58,8 @@ export function LuckySpin() {
   const handleSpinComplete = () => {
     setIsSpinning(false);
     
-    if (spinResult) {
-      // Show trophy dialog instead of toast
+    if (spinResult !== null) {
+      // Show trophy dialog after animation completes
       setShowResultDialog(true);
     }
   };
@@ -78,13 +84,26 @@ export function LuckySpin() {
               onClick={handleSpin}
               disabled={isSpinning || hasSpunToday || !canSpin}
             >
-              {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
+              {isSpinning ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Spinning for 5s...
+                </span>
+              ) : 'Spin the Wheel'}
             </Button>
             <p className="text-xs text-gray-400 mt-2">
               {hasSpunToday 
                 ? 'You\'ve already used your spin today. Come back tomorrow!' 
                 : '1 free spin available daily. Spin to earn money!'}
             </p>
+            {isSpinning && (
+              <p className="text-sm text-yellow-500 mt-4 animate-pulse">
+                Your prize is being determined... Good luck!
+              </p>
+            )}
           </div>
           
           <div className="mt-6 grid grid-cols-3 gap-2 w-full max-w-md">
@@ -126,7 +145,15 @@ export function LuckySpin() {
           <div className="flex flex-col items-center py-6 space-y-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center z-10">
-                <Trophy className="w-20 h-20 text-yellow-500" />
+                <div className="relative flex items-center justify-center">
+                  <Trophy className="w-20 h-20 text-yellow-500" />
+                  {/* Amount badge */}
+                  <div className="absolute -bottom-1 flex items-center justify-center w-full">
+                    <div className="bg-yellow-600 text-white font-bold rounded-full px-3 py-1 text-sm shadow-lg border border-yellow-400">
+                      ₦{spinResult?.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="w-36 h-36 rounded-full bg-gradient-to-r from-yellow-600/20 via-yellow-500/20 to-yellow-600/20 flex items-center justify-center animate-pulse" />
               {/* Light rays animation */}
