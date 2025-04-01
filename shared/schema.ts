@@ -8,7 +8,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  balance: integer("balance").notNull().default(5000),
+  balance: integer("balance").notNull().default(1000),
   isVip: boolean("is_vip").notNull().default(false),
   lastSpinDate: timestamp("last_spin_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

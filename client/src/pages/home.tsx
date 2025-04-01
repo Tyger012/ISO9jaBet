@@ -53,7 +53,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">Predict & Win Big</h1>
-              <p className="text-gray-300 mt-2">Predict matches correctly and win up to ₦<span className="text-accent font-semibold">{isVip ? '7,500' : '5,000'}</span> per match</p>
+              <p className="text-gray-300 mt-2">Predict matches correctly and win up to ₦<span className="text-accent font-semibold">{isVip ? '7,500' : '3,000'}</span> per match</p>
               <div className="mt-4 flex space-x-3">
                 <Button 
                   variant="default"

@@ -278,7 +278,7 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
           
           if (matchResult === bet.prediction) {
             betStatus = "won";
-            balanceChange = user.isVip ? 7500 : 5000; // VIP gets ₦7,500, regular gets ₦5,000
+            balanceChange = user.isVip ? 7500 : 3000; // VIP gets ₦7,500, regular gets ₦3,000
           } else {
             balanceChange = -(user.isVip ? 1000 : 2000); // VIP loses ₦1,000, regular loses ₦2,000
           }
@@ -423,21 +423,21 @@ export async function registerRoutes(app: express.Express): Promise<Server> {
       }
       
       // Check balance for VIP fee (if they're not using direct payment option)
-      if (user.balance < 3000) {
-        return res.status(400).json({ message: "Insufficient balance. You need ₦3,000 to activate VIP" });
+      if (user.balance < 5000) {
+        return res.status(400).json({ message: "Insufficient balance. You need ₦5,000 to activate VIP" });
       }
       
       // Update user to VIP status and deduct fee
       await storage.updateUser(userId, {
         isVip: true,
-        balance: user.balance - 3000
+        balance: user.balance - 5000
       });
       
       // Record transaction
       await storage.createTransaction({
         userId,
         type: "vip_activation",
-        amount: -3000,
+        amount: -5000,
         details: "VIP Activation",
         status: "completed"
       });

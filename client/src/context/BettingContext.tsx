@@ -53,7 +53,7 @@ export function BettingProvider({ children }: { children: ReactNode }) {
   const isVip = user?.isVip || false;
   
   // Calculate potential return and loss
-  const winAmount = isVip ? 7500 : 5000;
+  const winAmount = isVip ? 7500 : 3000;
   const lossAmount = isVip ? 1000 : 2000;
   const potentialReturn = selectedBets.length * winAmount;
   const potentialLoss = selectedBets.length * lossAmount;
